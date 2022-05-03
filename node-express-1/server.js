@@ -1,10 +1,7 @@
 const express = require('express')
 const app = express()
 
-const { getPets, getPetById } = require('./controllers/getPets.controller')
-const { postPet } = require('./controllers/postPets.controller')
-
-app.get('/pets', getPets)
+const { petRouter } = require('./router/pets.route')
 
 //middleware
 
@@ -15,10 +12,8 @@ app.use((req, res, next) => {
 })
 
 app.use(express.json())
-
-app.get('/pets/:petId', getPetById)
-
-app.post('/pets', postPet)
+//Router
+app.use('/pets', petRouter)
 
 app.listen(3000, () => {
   console.log('listing on port 3000')
