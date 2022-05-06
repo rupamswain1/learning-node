@@ -4,8 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const planets_route_1 = __importDefault(require("./routes/planets/planets.route"));
-const app = express_1.default();
-app.use(express_1.default.json());
-app.use(planets_route_1.default);
-exports.default = app;
+const planets_controller_1 = require("./planets.controller");
+const getPlanetRouter = express_1.default.Router();
+getPlanetRouter.get('/planets', planets_controller_1.getAllPlanets);
+exports.default = getPlanetRouter;
