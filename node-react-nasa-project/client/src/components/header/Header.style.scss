@@ -1,0 +1,36 @@
+.nasa-{
+    &navbar{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        background-color: #2a382d;
+    }
+    &logo{
+        padding: 0.5rem;
+        font-weight: bold;
+            color:#03A64A;
+            font-size: 1.5rem;
+    }
+    &menu{
+        flex-basis: 50%;
+    }
+    &menuItem{
+        list-style: none;
+        display: flex;
+        margin: 0;
+        justify-content: flex-end;
+        &>li{
+            text-transform: uppercase;
+            background-color: #03A64A;
+            padding: 0.8rem;
+            font-weight: bold;
+            color:#fff;
+            font-size: 1.2rem;
+            transition: 0.2s ease-in;
+            &:hover{
+                cursor:pointer;
+                background-color: #025940;
+            }
+        }
+    }
+}
