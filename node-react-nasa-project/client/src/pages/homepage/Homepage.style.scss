@@ -34,4 +34,19 @@
 .launchBtn{
     padding: 0.5rem;
     text-transform: uppercase;
+    background-color: #03A64A;
+    color: #fff;
+    font-weight: bold;
+    outline: none;
+    border: none;
+    margin: 5px;
+    transition: 0.2s ease-in;
+    &:hover{
+        cursor: pointer;
+        background-color: #025940;
+    }
+}
+.launch-error{
+    color: red;
+    font-size: 0.9rem;
 }
