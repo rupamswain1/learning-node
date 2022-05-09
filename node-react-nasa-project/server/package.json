@@ -4,15 +4,19 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start:build":"tsc -w",
-    "start:run":"PORT=8000 nodemon ./build/server.js",
-    "start":"concurrently npm:start:*"
+    "start:build": "tsc -w",
+    "start:run": "PORT=8000 nodemon ./build/server.js",
+    "start": "concurrently npm:start:*"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/cors": "^2.8.12",
     "concurrently": "^7.1.0",
     "nodemon": "^2.0.16"
+  },
+  "dependencies": {
+    "cors": "^2.8.5"
   }
 }
