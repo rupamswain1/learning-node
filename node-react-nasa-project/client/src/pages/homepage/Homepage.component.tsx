@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import axios from 'axios';
 import './Homepage.style.scss'
 interface LaunchData {
@@ -14,6 +14,10 @@ function Homepage() {
   const [launchData, setlaunchData] = useState<LaunchData>({ launchDate: null, missionName: null, rocketType: null, destination: null });
   const [blankField, setBlankField] = useState<string[]>([]);
   const [exoPlanets, setExoPlanets] = useState<string[]>([]);
+  useEffect(() => {
+    axios.get('http://localhost:8000/planets')
+      .then(res => setExoPlanets(res.data))
+  }, [])
 
   const handleChange = (event: any): void => {
 
@@ -33,12 +37,9 @@ function Homepage() {
       }
     })
     setBlankField(emptyField)
-    console.log(blankField)
+
   }
-  const getPlanets = () => {
-    axios.get('http://localhost:8000/planets')
-      .then(res => console.log(res.data))
-  }
+
   return <div className="homepage-container">
     <div className='missionLauncher'>
       <div>
@@ -78,8 +79,10 @@ function Homepage() {
         </div>
         <div className='inputdata'>
           <label htmlFor="destExoPlanet">Destination Exoplanet</label>
-          <select id="destExoPlanet" name="destination" onChange={handleChange} onFocus={getPlanets}>
-            <option value=" "> </option>
+          <select id="destExoPlanet" name="destination" onChange={handleChange}>
+            {exoPlanets.map((planet) => {
+              return <option value={planet}>{planet}</option>
+            })}
           </select>
         </div>
         <input className="launchBtn" type="submit" value="Launch Mission" />

@@ -17,6 +17,7 @@
     "nodemon": "^2.0.16"
   },
   "dependencies": {
-    "cors": "^2.8.5"
+    "cors": "^2.8.5",
+    "csv-parse": "^5.0.4"
   }
 }
