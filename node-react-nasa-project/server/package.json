@@ -13,11 +13,13 @@
   "license": "ISC",
   "devDependencies": {
     "@types/cors": "^2.8.12",
+    "@types/morgan": "^1.9.3",
     "concurrently": "^7.1.0",
     "nodemon": "^2.0.16"
   },
   "dependencies": {
     "cors": "^2.8.5",
-    "csv-parse": "^5.0.4"
+    "csv-parse": "^5.0.4",
+    "morgan": "^1.10.0"
   }
 }

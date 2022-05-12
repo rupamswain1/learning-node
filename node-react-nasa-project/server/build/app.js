@@ -6,8 +6,17 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
 const planets_route_1 = __importDefault(require("./routes/planets/planets.route"));
+const path_1 = __importDefault(require("path"));
+const morgan_1 = __importDefault(require("morgan"));
 const app = express_1.default();
-app.use(cors_1.default());
+app.use(cors_1.default({
+    origin: 'http://localhost:3000',
+}));
+app.use(morgan_1.default('combined'));
 app.use(express_1.default.json());
+app.use(express_1.default.static(path_1.default.join(__dirname, '..', 'public')));
 app.use(planets_route_1.default);
+app.get('/', (req, res) => {
+    res.sendFile(path_1.default.join(__dirname, '..', 'public', 'index.html'));
+});
 exports.default = app;
