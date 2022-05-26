@@ -1,5 +1,5 @@
 import React from 'react'
-
+import { Link } from 'react-router-dom';
 import './Header.style.scss';
 function Header() {
     return (
@@ -10,13 +10,14 @@ function Header() {
             <div className='nasa-menu'>
                 <ul className='nasa-menuItem'>
                     <li>
-                        Launch
+                        <Link to="/launch">Launch</Link>
                     </li>
                     <li>
                         Upcoming
                     </li>
                     <li>
-                        History
+                        <Link to="/history">History</Link>
+
                     </li>
                 </ul>
             </div>
