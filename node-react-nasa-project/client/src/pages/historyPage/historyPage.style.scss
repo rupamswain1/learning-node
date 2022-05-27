@@ -1,0 +1,18 @@
+.historyPage{
+    background-color: var(--backgroundColor);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.sub-heading{
+    font-size: 25px;
+    color: #03A64A;;
+    text-decoration: underline;
+}
+.historyContainer{
+    width: 70vw;
+    border:1px solid #03A64A;
+    font-size: 15px;
+}

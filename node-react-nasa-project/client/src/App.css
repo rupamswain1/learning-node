@@ -1,6 +1,10 @@
+:root{
+  --backgroudColor:#dafae7;
+}
 body{
   box-sizing: border-box;
   font-size: 10px;
-  background-color: #dafae7;
+  
+  background-color: var(--backgroudColor);
 
 }
