@@ -1,8 +1,25 @@
-import React from 'react'
-
+import React, { useState, useEffect } from 'react'
+import axios from 'axios';
 import './historyPage.style.scss';
 
+interface HistoryPageState {
+    flightNumber: Number
+    mission: string
+    rocket: string
+    launchDate: Date
+    destination: string
+    customer: string[]
+    upcoming: boolean
+    success: boolean
+}
+
 const HistoryPage = () => {
+    const [historyLaunch, setHistoryLaunch] = useState<HistoryPageState[] | undefined>(undefined);
+    useEffect(() => {
+        axios.get('http://localhost:8000/launches')
+            .then(result => setHistoryLaunch(result.data))
+            .catch(err => console.log(err))
+    }, [])
     return (
         <div className='historyPage'>
             <h2 className='sub-heading'>Historical Launches</h2>
@@ -20,10 +37,21 @@ const HistoryPage = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>2</td>
-                            </tr>
+                            {
+                                historyLaunch ?
+                                    historyLaunch.map(launch => {
+                                        return (
+                                            <tr>
+                                                <td>{launch.flightNumber + ""}</td>
+                                                <td>{`${new Date(launch.launchDate).getDate()}/${new Date(launch.launchDate).getMonth() + 1}/${new Date(launch.launchDate).getFullYear()}`}</td>
+                                                <td>{launch.mission}</td>
+                                                <td>{launch.rocket}</td>
+                                                <td>{launch.customer.join(',')}</td>
+                                            </tr>
+                                        )
+                                    }) : ''
+                            }
+
                         </tbody>
                     </table>
                 </div>

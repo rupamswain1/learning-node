@@ -15,4 +15,19 @@
     width: 70vw;
     border:1px solid #03A64A;
     font-size: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color:#03A64A;
+}
+.history-table{
+    width: 100%;
+    padding: 20px;
+    &>thead>tr>th,&>tbody>tr>td{
+        border-bottom: 1px solid black;
+    }
+    &>tbody>tr>td{
+        padding: 10px;
+    }
+
 }
