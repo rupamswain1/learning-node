@@ -1,7 +1,7 @@
 import express from 'express'
-import { getAllPlanets } from './planets.controller'
+import { httpGetAllPlanets } from './planets.controller'
 const getPlanetRouter = express.Router()
 
-getPlanetRouter.get('/planets', getAllPlanets)
+getPlanetRouter.get('/planets', httpGetAllPlanets)
 
 export default getPlanetRouter

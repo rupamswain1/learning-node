@@ -42,3 +42,7 @@ export const loadPlanets = () => {
       })
   })
 }
+
+export const getHabitablePlanets=()=>{
+  return planets;
+}

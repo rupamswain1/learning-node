@@ -8,7 +8,7 @@ type launchInterface = {
   upcoming: boolean
   success: boolean
 }
-
+let latestFlightNumber = 100
 export const launches: launchInterface[] = [
   {
     flightNumber: 1,
@@ -21,3 +21,19 @@ export const launches: launchInterface[] = [
     success: true,
   },
 ]
+
+export const getAllLaunches = () => {
+  return launches
+}
+
+export const addNewLaunch = (launch: any): void => {
+  latestFlightNumber++
+  const newLaunch: launchInterface = {
+    flightNumber: latestFlightNumber,
+    success: true,
+    upcoming: true,
+    customer: ['Rupam Swain'],
+    ...launch,
+  }
+  launches.push(newLaunch)
+}

@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.loadPlanets = exports.planets = void 0;
+exports.getHabitablePlanets = exports.loadPlanets = exports.planets = void 0;
 const csv_parse_1 = require("csv-parse");
 const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
@@ -36,3 +36,7 @@ const loadPlanets = () => {
     });
 };
 exports.loadPlanets = loadPlanets;
+const getHabitablePlanets = () => {
+    return exports.planets;
+};
+exports.getHabitablePlanets = getHabitablePlanets;
