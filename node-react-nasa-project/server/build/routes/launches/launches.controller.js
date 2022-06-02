@@ -8,12 +8,12 @@ const httpGetAllLaunches = (req, res) => {
 exports.httpGetAllLaunches = httpGetAllLaunches;
 const httpAddLaunch = (req, res) => {
     const launch = req.body;
-    if (!launch.misson ||
+    console.log(launch.mission, !launch.rocket, !launch.launchDate, !launch.destination);
+    if (!launch.mission ||
         !launch.rocket ||
         !launch.launchDate ||
-        !launch.destination ||
-        !launch.customer) {
-        return res.status(400).json({ error: 'invalid launch property' });
+        !launch.destination) {
+        return res.status(400).json({ error: 'invalid launch property', launch });
     }
     launch.launchDate = new Date(launch.launchDate);
     if (isNaN(launch.launchDate)) {

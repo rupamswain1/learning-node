@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios';
 import './Homepage.style.scss'
+import { response } from 'express';
 interface LaunchData {
-  launchDate: string | null;
-  missionName: string | null;
-  rocketType: string | null;
+  launchDate: string | undefined;
+  mission: string | undefined;
+  rocket: string | undefined;
 
-  destination: string | null;
+  destination: string | undefined;
 
 }
 function Homepage() {
 
-  const [launchData, setlaunchData] = useState<LaunchData>({ launchDate: null, missionName: null, rocketType: null, destination: null });
+  const [launchData, setlaunchData] = useState<LaunchData>({ launchDate: undefined, mission: undefined, rocket: undefined, destination: undefined });
   const [blankField, setBlankField] = useState<string[]>([]);
   const [exoPlanets, setExoPlanets] = useState<string[]>([]);
   useEffect(() => {
@@ -19,25 +20,42 @@ function Homepage() {
       .then(res => setExoPlanets(res.data))
   }, [])
 
-  const handleChange = (event: any): void => {
 
-    setlaunchData(((prevState) => ({ ...prevState, [event.target.name]: event.target.value })))
-
-  }
   const handleSubmit = (event: any): void => {
     event.preventDefault();
-    const emptyField: string[] = []
-    Object.keys(launchData).forEach((key: string) => {
-      const value = launchData[key as keyof LaunchData];
-      if (value !== null) {
-        console.log(true);
-      }
-      else {
-        emptyField.push(key)
-      }
-    })
-    setBlankField(emptyField)
+    const data = new FormData(event.target);
+    const launchDate = data.get("launchDate")?.toString();
+    const missionName = data.get("missionName")?.toString();
+    const rocketType = data.get("rocketType")?.toString();
+    const destination = data.get("destination")?.toString();
+    const emptyField: string[] = [];
+    if (!launchDate) {
+      emptyField.push("Launch Date")
+      launchDate
+    }
+    if (!missionName) {
+      emptyField.push("Mission Name")
+    }
+    if (!rocketType) {
+      emptyField.push("Rocket Type")
+    }
+    if (!destination || destination === "select") {
+      emptyField.push("Destination")
+    }
 
+    setBlankField(emptyField)
+    if (emptyField.length < 1) {
+      console.log(launchDate, missionName, rocketType, destination)
+      setlaunchData((prevState) => { return { ...prevState, launchDate: launchDate, mission: missionName, rocket: rocketType, destination: destination } })
+      console.log(launchData)
+
+      axios.post('http://localhost:8000/launches', { launchDate: launchDate, mission: missionName, rocket: rocketType, destination: destination })
+        .then(response => {
+          console.log(response)
+        })
+
+
+    }
   }
 
   return <div className="homepage-container">
@@ -66,20 +84,21 @@ function Homepage() {
 
       <form className="launchInput" onSubmit={handleSubmit} >
         <div className='inputdata'>
-          <label htmlFor="launchData">Launch Date</label>
-          <input type="date" id="launchData" onChange={handleChange} name="launchDate" />
+          <label htmlFor="launchDate">Launch Date</label>
+          <input type="date" id="launchDate" name="launchDate" />
         </div>
         <div className='inputdata'>
           <label htmlFor="missionName">Mission Name</label>
-          <input type="text" id="missionName" name="missionName" onChange={handleChange} />
+          <input type="text" id="missionName" name="missionName" />
         </div>
         <div className='inputdata'>
           <label htmlFor="rocketType">Rocket type</label>
-          <input type="text" id="rocketType" name="rocketType" onChange={handleChange} />
+          <input type="text" id="rocketType" name="rocketType" />
         </div>
         <div className='inputdata'>
           <label htmlFor="destExoPlanet">Destination Exoplanet</label>
-          <select id="destExoPlanet" name="destination" onChange={handleChange}>
+          <select id="destExoPlanet" name="destination">
+            <option value="select">Select</option>
             {exoPlanets.map((planet) => {
               return <option value={planet}>{planet}</option>
             })}
