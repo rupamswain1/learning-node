@@ -15,6 +15,8 @@ function Homepage() {
   const [launchData, setlaunchData] = useState<LaunchData>({ launchDate: undefined, mission: undefined, rocket: undefined, destination: undefined });
   const [blankField, setBlankField] = useState<string[]>([]);
   const [exoPlanets, setExoPlanets] = useState<string[]>([]);
+  const [error, setError] = useState<string>();
+  const [launchSuccess, setlaunchSuccess] = useState<boolean>(true);
   useEffect(() => {
     axios.get('http://localhost:8000/planets')
       .then(res => setExoPlanets(res.data))
@@ -48,10 +50,14 @@ function Homepage() {
       console.log(launchDate, missionName, rocketType, destination)
       setlaunchData((prevState) => { return { ...prevState, launchDate: launchDate, mission: missionName, rocket: rocketType, destination: destination } })
       console.log(launchData)
-
+      setlaunchSuccess(false)
       axios.post('http://localhost:8000/launches', { launchDate: launchDate, mission: missionName, rocket: rocketType, destination: destination })
         .then(response => {
-          console.log(response)
+          setlaunchSuccess(true)
+        })
+        .catch(err => {
+          setError(err.response.data.error)
+          setlaunchSuccess(true)
         })
 
 
@@ -79,7 +85,12 @@ function Homepage() {
           <div className='launch-error'>
             {`${blankField} are mandatory`}
           </div>
-          : ''
+          :
+          error ?
+            <div className='launch-error'>
+              {error}
+            </div>
+            : ''
       }
 
       <form className="launchInput" onSubmit={handleSubmit} >
@@ -104,7 +115,8 @@ function Homepage() {
             })}
           </select>
         </div>
-        <input className="launchBtn" type="submit" value="Launch Mission" />
+        <input className={`launchBtn ${launchSuccess ? '' : "btn-disable"}`} type="submit" value={`${!launchSuccess ? 'Launching.....' : 'Launch Mission'}`} />
+
       </form>
     </div>
 
