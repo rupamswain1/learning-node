@@ -25,6 +25,9 @@ function Homepage() {
 
   const handleSubmit = (event: any): void => {
     event.preventDefault();
+    if (!launchSuccess) {
+      return;
+    }
     const data = new FormData(event.target);
     const launchDate = data.get("launchDate")?.toString();
     const missionName = data.get("missionName")?.toString();

@@ -3,9 +3,11 @@ import express from 'express'
 import {
   httpGetAllLaunches,
   httpAddLaunch,
+  httpDeleteLaunch,
 } from '../../routes/launches/launches.controller'
 
 export const launchRouter = express.Router()
 
-launchRouter.get('/launches', httpGetAllLaunches)
-launchRouter.post('/launches', httpAddLaunch)
+launchRouter.get('/', httpGetAllLaunches)
+launchRouter.post('/', httpAddLaunch)
+launchRouter.delete('/:flightNumber', httpDeleteLaunch)

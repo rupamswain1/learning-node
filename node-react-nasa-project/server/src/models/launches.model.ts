@@ -37,3 +37,17 @@ export const addNewLaunch = (launch: any): void => {
   }
   launches.push(newLaunch)
 }
+
+export const getLaunchByFlightNumber = (flightNumber: Number) => {
+  return launches.filter((launch) => launch.flightNumber === flightNumber)
+}
+
+export const abortLaunch = (flightNumber: Number) => {
+  return launches.filter((launch) => {
+    if (launch.flightNumber === flightNumber) {
+      launch.upcoming = false
+      launch.success = false
+    }
+    return launch
+  })
+}

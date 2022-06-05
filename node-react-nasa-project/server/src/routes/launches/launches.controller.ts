@@ -1,6 +1,11 @@
 import { Request, Response } from 'express'
 
-import { getAllLaunches, addNewLaunch } from '../../models/launches.model'
+import {
+  getAllLaunches,
+  addNewLaunch,
+  getLaunchByFlightNumber,
+  abortLaunch,
+} from '../../models/launches.model'
 
 export const httpGetAllLaunches = (req: Request, res: Response) => {
   return res.status(200).json(getAllLaunches())
@@ -29,4 +34,15 @@ export const httpAddLaunch = (req: Request, res: Response) => {
   }
   addNewLaunch(launch)
   return res.status(201).json(getAllLaunches())
+}
+
+export const httpDeleteLaunch = (req: Request, res: Response) => {
+  const flightNumber = Number(req.params.flightNumber)
+  let launch = getLaunchByFlightNumber(flightNumber)
+
+  if (launch.length > 0) {
+    launch = abortLaunch(flightNumber)
+    return res.status(200).json(launch)
+  }
+  return res.status(400).json(`FlightNumber: ${flightNumber} is not found`)
 }

@@ -17,7 +17,7 @@ app.use(morgan_1.default('combined'));
 app.use(express_1.default.json());
 app.use(express_1.default.static(path_1.default.join(__dirname, '..', 'public')));
 app.use(planets_route_1.default);
-app.use(launches_route_1.launchRouter);
+app.use('/launches', launches_route_1.launchRouter);
 app.get('/', (req, res) => {
     res.sendFile(path_1.default.join(__dirname, '..', 'public', 'index.html'));
 });

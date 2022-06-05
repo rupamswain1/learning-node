@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.addNewLaunch = exports.getAllLaunches = exports.launches = void 0;
+exports.abortLaunch = exports.getLaunchByFlightNumber = exports.addNewLaunch = exports.getAllLaunches = exports.launches = void 0;
 let latestFlightNumber = 100;
 exports.launches = [
     {
@@ -24,3 +24,17 @@ const addNewLaunch = (launch) => {
     exports.launches.push(newLaunch);
 };
 exports.addNewLaunch = addNewLaunch;
+const getLaunchByFlightNumber = (flightNumber) => {
+    return exports.launches.filter((launch) => launch.flightNumber === flightNumber);
+};
+exports.getLaunchByFlightNumber = getLaunchByFlightNumber;
+const abortLaunch = (flightNumber) => {
+    return exports.launches.filter((launch) => {
+        if (launch.flightNumber === flightNumber) {
+            launch.upcoming = false;
+            launch.success = false;
+        }
+        return launch;
+    });
+};
+exports.abortLaunch = abortLaunch;
