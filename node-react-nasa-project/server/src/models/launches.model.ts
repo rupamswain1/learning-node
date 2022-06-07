@@ -51,3 +51,19 @@ export const abortLaunch = (flightNumber: Number) => {
     return launch
   })
 }
+
+export const getHistoricalLaunches = (): launchInterface[] => {
+  const today = new Date()
+  return launches.filter(
+    (launch) =>
+      today > new Date(launch.launchDate) || launch.upcoming === false,
+  )
+}
+
+export const getUpcomingLaunches = (): launchInterface[] => {
+  const today = new Date()
+  return launches.filter(
+    (launch) =>
+      today <= new Date(launch.launchDate) && launch.upcoming !== false,
+  )
+}

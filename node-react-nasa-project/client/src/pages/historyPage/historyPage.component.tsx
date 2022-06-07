@@ -20,7 +20,7 @@ interface HistoryPageState {
 const HistoryPage = () => {
     const [historyLaunch, setHistoryLaunch] = useState<HistoryPageState[] | undefined>();
     useEffect(() => {
-        axios.get('http://localhost:8000/launches')
+        axios.get('http://localhost:8000/launches/history')
             .then(result => setHistoryLaunch(result.data))
             .catch(err => console.log(err))
     }, [])

@@ -10,10 +10,10 @@ function Header() {
             <div className='nasa-menu'>
                 <ul className='nasa-menuItem'>
                     <li>
-                        <Link to="/launch">Launch</Link>
+                        <Link to="/">Launch</Link>
                     </li>
                     <li>
-                        Upcoming
+                        <Link to="/upcoming">Upcoming</Link>
                     </li>
                     <li>
                         <Link to="/history">History</Link>

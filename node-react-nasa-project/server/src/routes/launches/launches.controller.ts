@@ -5,6 +5,8 @@ import {
   addNewLaunch,
   getLaunchByFlightNumber,
   abortLaunch,
+  getHistoricalLaunches,
+  getUpcomingLaunches,
 } from '../../models/launches.model'
 
 export const httpGetAllLaunches = (req: Request, res: Response) => {
@@ -45,4 +47,14 @@ export const httpDeleteLaunch = (req: Request, res: Response) => {
     return res.status(200).json(launch)
   }
   return res.status(400).json(`FlightNumber: ${flightNumber} is not found`)
+}
+
+export const httpGetHistoricalLaunch = (req: Request, res: Response) => {
+  const historicalLaunches = getHistoricalLaunches()
+  return res.status(200).json(historicalLaunches)
+}
+
+export const httpGetUpcomingLaunch = (req: Request, res: Response) => {
+  const upcomingLaunch = getUpcomingLaunches()
+  return res.status(200).json(upcomingLaunch)
 }

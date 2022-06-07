@@ -10,3 +10,5 @@ exports.launchRouter = express_1.default.Router();
 exports.launchRouter.get('/', launches_controller_1.httpGetAllLaunches);
 exports.launchRouter.post('/', launches_controller_1.httpAddLaunch);
 exports.launchRouter.delete('/:flightNumber', launches_controller_1.httpDeleteLaunch);
+exports.launchRouter.get('/history', launches_controller_1.httpGetHistoricalLaunch);
+exports.launchRouter.get('/upcoming', launches_controller_1.httpGetUpcomingLaunch);

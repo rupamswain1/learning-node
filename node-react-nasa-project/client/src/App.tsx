@@ -2,6 +2,7 @@ import Homepage from "./pages/homepage/Homepage.component"
 import Header from "./components/header/Header.component";
 import LaunchPage from "./pages/launchPage/launchPage.component";
 import HistoryPage from "./pages/historyPage/historyPage.component";
+import { UpcomingPage } from "./pages/upcomingPage/upcomingPage.component";
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './App.css'
 function App() {
@@ -13,7 +14,7 @@ function App() {
         <Header />
         <Routes>
           <Route path="/" element={<Homepage />} />
-          <Route path="/launch" element={<LaunchPage />} />
+          <Route path="/upcoming" element={<UpcomingPage />} />
           <Route path="/history" element={<HistoryPage />} />
         </Routes>
 

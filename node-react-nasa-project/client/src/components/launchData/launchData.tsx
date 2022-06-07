@@ -19,13 +19,7 @@ type launchDataProps = {
 
 const LaunchData: React.FC<launchDataProps> = ({ launchData, historical }) => {
     let data: LaunchData[] = [];
-    if (historical) {
-        data = launchData.filter((launch) => new Date() > new Date(launch.launchDate) || launch.upcoming === false)
-    }
-    else {
-        data = launchData.filter((launch) => new Date < new Date(launch.launchDate));
-    }
-    console.log(data)
+
     const abort = (flightNumber: Number) => {
         return flightNumber
     }
@@ -48,7 +42,7 @@ const LaunchData: React.FC<launchDataProps> = ({ launchData, historical }) => {
             <tbody>
                 {
                     launchData ?
-                        data.map(launch => {
+                        launchData.map(launch => {
                             return (
                                 <tr>
                                     <td>{launch.flightNumber + ""}</td>
@@ -57,13 +51,11 @@ const LaunchData: React.FC<launchDataProps> = ({ launchData, historical }) => {
                                     <td>{launch.rocket}</td>
                                     <td>{launch.customer.join(',')}</td>
                                     {
-                                        history ?
-                                            launch.success ?
+                                        historical ?
+                                            (launch.success ?
                                                 <td>Success</td>
-                                                : <td>Aborted</td>
-                                            :
-                                            <td onClick={() => abort(launch.flightNumber)}>X</td>
-
+                                                : <td>Aborted</td>)
+                                            : <td onClick={() => abort(launch.flightNumber)}>X</td>
                                     }
                                 </tr>
                             )

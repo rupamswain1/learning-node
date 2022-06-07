@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.abortLaunch = exports.getLaunchByFlightNumber = exports.addNewLaunch = exports.getAllLaunches = exports.launches = void 0;
+exports.getUpcomingLaunches = exports.getHistoricalLaunches = exports.abortLaunch = exports.getLaunchByFlightNumber = exports.addNewLaunch = exports.getAllLaunches = exports.launches = void 0;
 let latestFlightNumber = 100;
 exports.launches = [
     {
@@ -38,3 +38,13 @@ const abortLaunch = (flightNumber) => {
     });
 };
 exports.abortLaunch = abortLaunch;
+const getHistoricalLaunches = () => {
+    const today = new Date();
+    return exports.launches.filter((launch) => today > new Date(launch.launchDate) || launch.upcoming === false);
+};
+exports.getHistoricalLaunches = getHistoricalLaunches;
+const getUpcomingLaunches = () => {
+    const today = new Date();
+    return exports.launches.filter((launch) => today <= new Date(launch.launchDate) && launch.upcoming !== false);
+};
+exports.getUpcomingLaunches = getUpcomingLaunches;
