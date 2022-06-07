@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from 'react'
+import LaunchData from '../../components/launchData/launchData';
+
 import axios from 'axios';
+
+
 import './historyPage.style.scss';
 
 interface HistoryPageState {
@@ -14,7 +18,7 @@ interface HistoryPageState {
 }
 
 const HistoryPage = () => {
-    const [historyLaunch, setHistoryLaunch] = useState<HistoryPageState[] | undefined>(undefined);
+    const [historyLaunch, setHistoryLaunch] = useState<HistoryPageState[] | undefined>();
     useEffect(() => {
         axios.get('http://localhost:8000/launches')
             .then(result => setHistoryLaunch(result.data))
@@ -26,34 +30,11 @@ const HistoryPage = () => {
             <div className='historyContainer'>
                 <div>
                     <h3>History of Mission launches including SpaceX launches starting from the year 2006.</h3>
-                    <table className='history-table'>
-                        <thead>
-                            <tr>
-                                <th>No.</th>
-                                <th>Date</th>
-                                <th>Mission</th>
-                                <th>Rocket</th>
-                                <th>Customers</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {
-                                historyLaunch ?
-                                    historyLaunch.map(launch => {
-                                        return (
-                                            <tr>
-                                                <td>{launch.flightNumber + ""}</td>
-                                                <td>{`${new Date(launch.launchDate).getDate()}/${new Date(launch.launchDate).getMonth() + 1}/${new Date(launch.launchDate).getFullYear()}`}</td>
-                                                <td>{launch.mission}</td>
-                                                <td>{launch.rocket}</td>
-                                                <td>{launch.customer.join(',')}</td>
-                                            </tr>
-                                        )
-                                    }) : ''
-                            }
+                    {
+                        historyLaunch &&
+                        <LaunchData launchData={historyLaunch} historical={true} />
+                    }
 
-                        </tbody>
-                    </table>
                 </div>
             </div>
         </div>
