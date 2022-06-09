@@ -18,7 +18,7 @@ const planets_model_1 = require("./models/planets.model");
 const PORT = process.env.PORT || 8000;
 const server = http_1.default.createServer(app_1.default);
 const startServer = () => __awaiter(void 0, void 0, void 0, function* () {
-    yield planets_model_1.loadPlanets();
+    yield (0, planets_model_1.loadPlanets)();
     server.listen(PORT, () => {
         console.log(`Listining on port ${PORT}`);
     });

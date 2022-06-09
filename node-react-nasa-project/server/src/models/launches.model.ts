@@ -20,6 +20,16 @@ export const launches: launchInterface[] = [
     upcoming: true,
     success: true,
   },
+  {
+    flightNumber: 2,
+    mission: 'Moon',
+    rocket: 'chandra yaan',
+    launchDate: new Date('2030-03-25'),
+    destination: 'Moon',
+    customer: ['Elon'],
+    upcoming: true,
+    success: true,
+  },
 ]
 
 export const getAllLaunches = () => {

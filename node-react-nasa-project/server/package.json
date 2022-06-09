@@ -6,20 +6,26 @@
   "scripts": {
     "start:build": "tsc -w",
     "start:run": "PORT=8000 nodemon ./build/server.js",
-    "start": "concurrently npm:start:*"
+    "start": "concurrently npm:start:*",
+    "test": "jest"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@types/cors": "^2.8.12",
+    "@types/jest": "^28.1.1",
     "@types/morgan": "^1.9.3",
+    "@types/supertest": "^2.0.12",
     "concurrently": "^7.1.0",
-    "nodemon": "^2.0.16"
+    "nodemon": "^2.0.16",
+    "supertest": "^6.2.3",
+    "ts-jest": "^28.0.4"
   },
   "dependencies": {
     "cors": "^2.8.5",
     "csv-parse": "^5.0.4",
+    "jest": "^28.1.1",
     "morgan": "^1.10.0"
   }
 }
