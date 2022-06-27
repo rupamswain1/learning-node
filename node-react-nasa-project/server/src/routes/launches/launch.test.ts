@@ -120,3 +120,42 @@ describe('test POST /launches', () => {
     })
   })
 })
+const invalidDateLaunch = {
+  mission: 'moon',
+  rocket: 'chandra yaan',
+  launchDate: '2023-05-251',
+  destination: 'Moon',
+  customer: ['ISRO'],
+}
+const incompleteData = {
+  mission: 'moon',
+  rocket: 'chandra yaan',
+  launchDate: '2023-05-25',
+  // destination: 'Moon',
+  customer: ['ISRO'],
+}
+
+describe('test errors from POST launches', () => {
+  test('it should catch the invalid date error', async () => {
+    const response = await request(app)
+      .post('/launches')
+      .send(invalidDateLaunch)
+      .expect('Content-Type', /json/)
+      .expect(400)
+    expect(response.body).toStrictEqual({
+      error: 'invalid launch date',
+    })
+  })
+
+  test('it should catch the missing required attribute error', async () => {
+    const response = await request(app)
+      .post('/launches')
+      .send(incompleteData)
+      .expect('Content-Type', /json/)
+      .expect(400)
+    expect(response.body).toStrictEqual({
+      error: 'invalid launch property',
+      launch: incompleteData,
+    })
+  })
+})
