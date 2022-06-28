@@ -1,5 +1,5 @@
 import express from 'express'
-
+import cluster from 'cluster'
 const app = express()
 
 function delay(timer: number) {
@@ -8,12 +8,12 @@ function delay(timer: number) {
 }
 
 app.get('/test', (req, res) => {
-  res.send('Performace Test')
+  res.send(`Performace Test completed on ${process.pid}`)
 })
 
 app.get('/timer', (req, res) => {
   delay(9000)
-  res.send('timer completed')
+  res.send(`timer completed on ${process.pid}`)
 })
 
 export default app

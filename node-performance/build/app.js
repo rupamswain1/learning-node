@@ -10,10 +10,10 @@ function delay(timer) {
     while (Date.now() - startTime < timer) { }
 }
 app.get('/test', (req, res) => {
-    res.send('Performace Test');
+    res.send(`Performace Test completed on ${process.pid}`);
 });
 app.get('/timer', (req, res) => {
     delay(9000);
-    res.send('timer completed');
+    res.send(`timer completed on ${process.pid}`);
 });
 exports.default = app;

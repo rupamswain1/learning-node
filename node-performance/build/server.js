@@ -13,6 +13,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const http_1 = __importDefault(require("http"));
+//Importing node cluster module
+const cluster_1 = __importDefault(require("cluster"));
+const os_1 = __importDefault(require("os"));
 const app_1 = __importDefault(require("./app"));
 const PORT = process.env.PORT || 8000;
 const server = http_1.default.createServer(app_1.default);
@@ -22,4 +25,15 @@ const startServer = () => __awaiter(void 0, void 0, void 0, function* () {
         console.log(`Listining on port ${PORT}`);
     });
 });
-startServer();
+if (cluster_1.default.isPrimary) {
+    console.log('Primary thread');
+    //fork the server
+    const NUMBER_WORKERS = os_1.default.cpus().length;
+    for (let i = 0; i < NUMBER_WORKERS; i++) {
+        cluster_1.default.fork();
+    }
+}
+else {
+    console.log('this is the worker thread');
+    startServer();
+}
