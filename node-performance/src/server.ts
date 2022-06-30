@@ -1,7 +1,7 @@
 import http from 'http'
 //Importing node cluster module
 import cluster from 'cluster'
-import os from 'os'
+// import os from 'os'
 import app from './app'
 
 const PORT = process.env.PORT || 8000
@@ -16,10 +16,10 @@ const startServer = async () => {
 if (cluster.isPrimary) {
   console.log('Primary thread')
   //fork the server
-  const NUMBER_WORKERS = os.cpus().length
-  for (let i = 0; i < NUMBER_WORKERS; i++) {
-    cluster.fork()
-  }
+  // const NUMBER_WORKERS = os.cpus().length
+  // for (let i = 0; i < NUMBER_WORKERS; i++) {
+  //   cluster.fork()
+  // }
 } else {
   console.log('this is the worker thread')
   startServer()
