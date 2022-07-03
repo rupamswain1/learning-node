@@ -57,8 +57,8 @@ export const abortLaunch = (flightNumber: Number) => {
     if (launch.flightNumber === flightNumber) {
       launch.upcoming = false
       launch.success = false
+      return launch
     }
-    return launch
   })
 }
 

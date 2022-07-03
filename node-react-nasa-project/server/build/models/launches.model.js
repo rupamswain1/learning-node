@@ -43,8 +43,8 @@ const abortLaunch = (flightNumber) => {
         if (launch.flightNumber === flightNumber) {
             launch.upcoming = false;
             launch.success = false;
+            return launch;
         }
-        return launch;
     });
 };
 exports.abortLaunch = abortLaunch;

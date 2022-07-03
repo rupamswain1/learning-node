@@ -1,5 +1,7 @@
 import React from 'react'
 
+import './launchData.scss'
+
 type LaunchData = {
     flightNumber: Number
     mission: string
@@ -20,9 +22,7 @@ type launchDataProps = {
 const LaunchData: React.FC<launchDataProps> = ({ launchData, historical }) => {
     let data: LaunchData[] = [];
 
-    const abort = (flightNumber: Number) => {
-        return flightNumber
-    }
+
     return (
         <table className='history-table'>
             <thead>
@@ -55,7 +55,7 @@ const LaunchData: React.FC<launchDataProps> = ({ launchData, historical }) => {
                                             (launch.success ?
                                                 <td>Success</td>
                                                 : <td>Aborted</td>)
-                                            : <td onClick={() => abort(launch.flightNumber)}>X</td>
+                                            : <td className="close-btn" id={`${launch.flightNumber}`} >X</td>
                                     }
                                 </tr>
                             )
