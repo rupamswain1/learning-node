@@ -1,5 +1,5 @@
 import http from 'http'
-import mongoose from 'mongoose'
+import { connect, connection } from 'mongoose'
 import * as dotenv from 'dotenv'
 
 import app from './app'
@@ -10,18 +10,18 @@ dotenv.config()
 const PORT = process.env.PORT || 8000
 const MONGO_URL = process.env.mongo_url || 'dummy url'
 
-mongoose.connection.once('open', () => {
+connection.once('open', () => {
   console.log('MongoDB connection Eshtablished')
 })
 
-mongoose.connection.on('error', () => {
+connection.on('error', () => {
   console.log('mongoDB connection failed')
 })
 
 const server = http.createServer(app)
 
 const startServer = async () => {
-  await mongoose.connect(MONGO_URL)
+  await connect(MONGO_URL)
   await loadPlanets()
   server.listen(PORT, () => {
     console.log(`Listining on port ${PORT}`)
