@@ -2,6 +2,8 @@ import { parse } from 'csv-parse'
 import fs from 'fs'
 import path from 'path'
 
+import Planets from './planets.mongo'
+
 type Planets = {
   name: string
 }
@@ -28,21 +30,43 @@ export const loadPlanets = () => {
           columns: true,
         }),
       )
-      .on('data', (data) => {
+      .on('data', async (data) => {
         if (isHabitable(data)) {
-          planets.push(data.kepler_name)
+          await savePlanets(data.kepler_name)
         }
       })
       .on('error', (err) => {
         console.log(err)
         reject()
       })
-      .on('end', () => {
+      .on('end', async () => {
+        const planetNum = (await getHabitablePlanets()).length
+
+        console.log(`found ${planetNum} habtable planets`)
         resolve()
       })
   })
 }
 
-export const getHabitablePlanets=()=>{
-  return planets;
+export const savePlanets = async (planetName: String): Promise<void> => {
+  try {
+    await Planets.updateOne(
+      {
+        planetName: planetName,
+      },
+      {
+        planetName: planetName,
+      },
+      {
+        upsert: true,
+      },
+    )
+  } catch (err) {
+    throw new Error(`unable to save planet ${err}`)
+  }
+}
+
+export const getHabitablePlanets = async () => {
+  const allplanets = await Planets.find({})
+  return allplanets
 }

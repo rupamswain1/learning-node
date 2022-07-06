@@ -1,12 +1,22 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getHabitablePlanets = exports.loadPlanets = exports.planets = void 0;
+exports.getHabitablePlanets = exports.savePlanets = exports.loadPlanets = exports.planets = void 0;
 const csv_parse_1 = require("csv-parse");
 const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
+const planets_mongo_1 = __importDefault(require("./planets.mongo"));
 exports.planets = [];
 const isHabitable = (planet) => {
     return (planet['koi_disposition'] === 'CONFIRMED' &&
@@ -21,22 +31,40 @@ const loadPlanets = () => {
             comment: '#',
             columns: true,
         }))
-            .on('data', (data) => {
+            .on('data', (data) => __awaiter(void 0, void 0, void 0, function* () {
             if (isHabitable(data)) {
-                exports.planets.push(data.kepler_name);
+                yield (0, exports.savePlanets)(data.kepler_name);
             }
-        })
+        }))
             .on('error', (err) => {
             console.log(err);
             reject();
         })
-            .on('end', () => {
+            .on('end', () => __awaiter(void 0, void 0, void 0, function* () {
+            const planetNum = (yield (0, exports.getHabitablePlanets)()).length;
+            console.log(`found ${planetNum} habtable planets`);
             resolve();
-        });
+        }));
     });
 };
 exports.loadPlanets = loadPlanets;
-const getHabitablePlanets = () => {
-    return exports.planets;
-};
+const savePlanets = (planetName) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        yield planets_mongo_1.default.updateOne({
+            planetName: planetName,
+        }, {
+            planetName: planetName,
+        }, {
+            upsert: true,
+        });
+    }
+    catch (err) {
+        throw new Error(`unable to save planet ${err}`);
+    }
+});
+exports.savePlanets = savePlanets;
+const getHabitablePlanets = () => __awaiter(void 0, void 0, void 0, function* () {
+    const allplanets = yield planets_mongo_1.default.find({});
+    return allplanets;
+});
 exports.getHabitablePlanets = getHabitablePlanets;
