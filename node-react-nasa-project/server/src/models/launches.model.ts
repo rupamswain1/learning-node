@@ -1,3 +1,5 @@
+import Launches from './launches.mongo'
+
 type launchInterface = {
   flightNumber: Number
   mission: string
@@ -32,6 +34,12 @@ export const launches: launchInterface[] = [
   },
 ]
 
+export const saveLaunch = async (launch: launchInterface) => {
+  await Launches.updateOne({ flightNumber: launch.flightNumber }, launch, {
+    upsert: true,
+  })
+}
+saveLaunch(launches[0])
 export const getAllLaunches = () => {
   return launches
 }

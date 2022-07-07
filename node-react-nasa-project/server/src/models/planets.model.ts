@@ -67,6 +67,6 @@ export const savePlanets = async (planetName: String): Promise<void> => {
 }
 
 export const getHabitablePlanets = async () => {
-  const allplanets = await Planets.find({})
+  const allplanets = await Planets.find({}, { _id: 0, __v: 0 })
   return allplanets
 }

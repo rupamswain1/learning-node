@@ -64,7 +64,7 @@ const savePlanets = (planetName) => __awaiter(void 0, void 0, void 0, function* 
 });
 exports.savePlanets = savePlanets;
 const getHabitablePlanets = () => __awaiter(void 0, void 0, void 0, function* () {
-    const allplanets = yield planets_mongo_1.default.find({});
+    const allplanets = yield planets_mongo_1.default.find({}, { _id: 0, __v: 0 });
     return allplanets;
 });
 exports.getHabitablePlanets = getHabitablePlanets;

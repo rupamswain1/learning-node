@@ -10,11 +10,15 @@ interface LaunchData {
   destination: string | undefined;
 
 }
+interface exoPlanetInterFace {
+  planetName: string
+}
+
 function Homepage() {
 
   const [launchData, setlaunchData] = useState<LaunchData>({ launchDate: undefined, mission: undefined, rocket: undefined, destination: undefined });
   const [blankField, setBlankField] = useState<string[]>([]);
-  const [exoPlanets, setExoPlanets] = useState<string[]>([]);
+  const [exoPlanets, setExoPlanets] = useState<exoPlanetInterFace[]>([]);
   const [error, setError] = useState<string>();
   const [launchSuccess, setlaunchSuccess] = useState<boolean>(true);
   useEffect(() => {
@@ -114,7 +118,8 @@ function Homepage() {
           <select id="destExoPlanet" name="destination">
             <option value="select">Select</option>
             {exoPlanets.map((planet) => {
-              return <option value={planet}>{planet}</option>
+              console.log(planet.planetName)
+              return <option value={planet.planetName}>{planet.planetName}</option>
             })}
           </select>
         </div>

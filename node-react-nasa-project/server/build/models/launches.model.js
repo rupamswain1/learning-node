@@ -1,6 +1,19 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getUpcomingLaunches = exports.getHistoricalLaunches = exports.abortLaunch = exports.getLaunchByFlightNumber = exports.addNewLaunch = exports.getAllLaunches = exports.launches = void 0;
+exports.getUpcomingLaunches = exports.getHistoricalLaunches = exports.abortLaunch = exports.getLaunchByFlightNumber = exports.addNewLaunch = exports.getAllLaunches = exports.saveLaunch = exports.launches = void 0;
+const launches_mongo_1 = __importDefault(require("./launches.mongo"));
 let latestFlightNumber = 100;
 exports.launches = [
     {
@@ -24,6 +37,13 @@ exports.launches = [
         success: true,
     },
 ];
+const saveLaunch = (launch) => __awaiter(void 0, void 0, void 0, function* () {
+    yield launches_mongo_1.default.updateOne({ flightNumber: launch.flightNumber }, launch, {
+        upsert: true,
+    });
+});
+exports.saveLaunch = saveLaunch;
+(0, exports.saveLaunch)(exports.launches[0]);
 const getAllLaunches = () => {
     return exports.launches;
 };

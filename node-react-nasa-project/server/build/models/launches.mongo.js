@@ -5,6 +5,8 @@ const LaunchSchema = new mongoose_1.Schema({
     flightNumber: {
         required: true,
         type: Number,
+        min: 100,
+        max: 999,
     },
     mission: {
         required: true,
