@@ -1,10 +1,19 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.httpGetUpcomingLaunch = exports.httpGetHistoricalLaunch = exports.httpDeleteLaunch = exports.httpAddLaunch = exports.httpGetAllLaunches = void 0;
 const launches_model_1 = require("../../models/launches.model");
-const httpGetAllLaunches = (req, res) => {
-    return res.status(200).json((0, launches_model_1.getAllLaunches)());
-};
+const httpGetAllLaunches = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    return res.status(200).json(yield (0, launches_model_1.getAllLaunches)());
+});
 exports.httpGetAllLaunches = httpGetAllLaunches;
 const httpAddLaunch = (req, res) => {
     const launch = req.body;

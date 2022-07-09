@@ -39,9 +39,9 @@ export const saveLaunch = async (launch: launchInterface) => {
     upsert: true,
   })
 }
-saveLaunch(launches[0])
-export const getAllLaunches = () => {
-  return launches
+
+export const getAllLaunches = async () => {
+  return await Launches.find({}, { __v: 0, _id: 0 })
 }
 
 export const addNewLaunch = (launch: any): void => {

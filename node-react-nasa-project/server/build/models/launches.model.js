@@ -43,10 +43,9 @@ const saveLaunch = (launch) => __awaiter(void 0, void 0, void 0, function* () {
     });
 });
 exports.saveLaunch = saveLaunch;
-(0, exports.saveLaunch)(exports.launches[0]);
-const getAllLaunches = () => {
-    return exports.launches;
-};
+const getAllLaunches = () => __awaiter(void 0, void 0, void 0, function* () {
+    return yield launches_mongo_1.default.find({}, { __v: 0, _id: 0 });
+});
 exports.getAllLaunches = getAllLaunches;
 const addNewLaunch = (launch) => {
     latestFlightNumber++;

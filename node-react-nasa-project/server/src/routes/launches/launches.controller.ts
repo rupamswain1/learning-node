@@ -9,8 +9,8 @@ import {
   getUpcomingLaunches,
 } from '../../models/launches.model'
 
-export const httpGetAllLaunches = (req: Request, res: Response) => {
-  return res.status(200).json(getAllLaunches())
+export const httpGetAllLaunches = async (req: Request, res: Response) => {
+  return res.status(200).json(await getAllLaunches())
 }
 
 export const httpAddLaunch = (req: Request, res: Response) => {
