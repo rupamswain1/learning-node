@@ -12,8 +12,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getUpcomingLaunches = exports.getHistoricalLaunches = exports.abortLaunch = exports.getLaunchByFlightNumber = exports.addNewLaunch = exports.getAllLaunches = exports.saveLaunch = exports.launches = void 0;
+exports.getLatestFlightNumber = exports.getUpcomingLaunches = exports.getHistoricalLaunches = exports.abortLaunch = exports.getLaunchByFlightNumber = exports.addNewLaunch = exports.getAllLaunches = exports.saveLaunch = exports.launches = void 0;
 const launches_mongo_1 = __importDefault(require("./launches.mongo"));
+const planets_model_1 = require("./planets.model");
+const DEFAULT_FLIGHT_NUMBER = 100;
 let latestFlightNumber = 100;
 exports.launches = [
     {
@@ -38,11 +40,16 @@ exports.launches = [
     },
 ];
 const saveLaunch = (launch) => __awaiter(void 0, void 0, void 0, function* () {
+    const planet = yield (0, planets_model_1.getPlanetByName)(launch.destination);
+    if (!planet) {
+        throw new Error('planet not found');
+    }
     yield launches_mongo_1.default.updateOne({ flightNumber: launch.flightNumber }, launch, {
         upsert: true,
     });
 });
 exports.saveLaunch = saveLaunch;
+// saveLaunch(launches[0])
 const getAllLaunches = () => __awaiter(void 0, void 0, void 0, function* () {
     return yield launches_mongo_1.default.find({}, { __v: 0, _id: 0 });
 });
@@ -77,3 +84,14 @@ const getUpcomingLaunches = () => {
     return exports.launches.filter((launch) => today <= new Date(launch.launchDate) && launch.upcoming !== false);
 };
 exports.getUpcomingLaunches = getUpcomingLaunches;
+const getLatestFlightNumber = () => __awaiter(void 0, void 0, void 0, function* () {
+    const latestRecord = yield launches_mongo_1.default.find().sort('-flightNumber');
+    if (!latestRecord) {
+        return DEFAULT_FLIGHT_NUMBER;
+    }
+    else {
+        return latestRecord[0].flightNumber;
+    }
+});
+exports.getLatestFlightNumber = getLatestFlightNumber;
+(0, exports.getLatestFlightNumber)().then((d) => console.log(d));

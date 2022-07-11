@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getHabitablePlanets = exports.savePlanets = exports.loadPlanets = exports.planets = void 0;
+exports.getPlanetByName = exports.getHabitablePlanets = exports.savePlanets = exports.loadPlanets = exports.planets = void 0;
 const csv_parse_1 = require("csv-parse");
 const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
@@ -68,3 +68,7 @@ const getHabitablePlanets = () => __awaiter(void 0, void 0, void 0, function* ()
     return allplanets;
 });
 exports.getHabitablePlanets = getHabitablePlanets;
+const getPlanetByName = (planetName) => __awaiter(void 0, void 0, void 0, function* () {
+    return yield planets_mongo_1.default.findOne({ planetName: planetName });
+});
+exports.getPlanetByName = getPlanetByName;

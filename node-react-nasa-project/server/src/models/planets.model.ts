@@ -70,3 +70,7 @@ export const getHabitablePlanets = async () => {
   const allplanets = await Planets.find({}, { _id: 0, __v: 0 })
   return allplanets
 }
+
+export const getPlanetByName = async (planetName: String) => {
+  return await Planets.findOne({ planetName: planetName })
+}
