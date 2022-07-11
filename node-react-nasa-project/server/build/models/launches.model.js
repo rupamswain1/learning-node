@@ -12,11 +12,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getLatestFlightNumber = exports.getUpcomingLaunches = exports.getHistoricalLaunches = exports.abortLaunch = exports.getLaunchByFlightNumber = exports.addNewLaunch = exports.getAllLaunches = exports.saveLaunch = exports.launches = void 0;
+exports.getLatestflightNumber = exports.getUpcomingLaunches = exports.getHistoricalLaunches = exports.abortLaunch = exports.getLaunchByflightNumber = exports.scheduleNewLaunch = exports.getAllLaunches = exports.saveLaunch = exports.launches = void 0;
 const launches_mongo_1 = __importDefault(require("./launches.mongo"));
 const planets_model_1 = require("./planets.model");
-const DEFAULT_FLIGHT_NUMBER = 100;
-let latestFlightNumber = 100;
+const DEFAULT_FLIGHT_number = 100;
+let latestflightNumber = 100;
 exports.launches = [
     {
         flightNumber: 1,
@@ -54,16 +54,26 @@ const getAllLaunches = () => __awaiter(void 0, void 0, void 0, function* () {
     return yield launches_mongo_1.default.find({}, { __v: 0, _id: 0 });
 });
 exports.getAllLaunches = getAllLaunches;
-const addNewLaunch = (launch) => {
-    latestFlightNumber++;
-    const newLaunch = Object.assign({ flightNumber: latestFlightNumber, success: true, upcoming: true, customer: ['Rupam Swain'] }, launch);
-    exports.launches.push(newLaunch);
-};
-exports.addNewLaunch = addNewLaunch;
-const getLaunchByFlightNumber = (flightNumber) => {
+const scheduleNewLaunch = (launch) => __awaiter(void 0, void 0, void 0, function* () {
+    const flightNum = yield (0, exports.getLatestflightNumber)();
+    yield (0, exports.saveLaunch)(Object.assign(Object.assign({}, launch), { success: true, upcoming: true, customer: ['Rupam'], flightNumber: flightNum + 1 }));
+});
+exports.scheduleNewLaunch = scheduleNewLaunch;
+// export const addNewLaunch = (launch: any): void => {
+//   latestflightNumber++
+//   const newLaunch: launchInterface = {
+//     flightNumber: latestflightNumber,
+//     success: true,
+//     upcoming: true,
+//     customer: ['Rupam Swain'],
+//     ...launch,
+//   }
+//   launches.push(newLaunch
+// }
+const getLaunchByflightNumber = (flightNumber) => {
     return exports.launches.filter((launch) => launch.flightNumber === flightNumber);
 };
-exports.getLaunchByFlightNumber = getLaunchByFlightNumber;
+exports.getLaunchByflightNumber = getLaunchByflightNumber;
 const abortLaunch = (flightNumber) => {
     return exports.launches.filter((launch) => {
         if (launch.flightNumber === flightNumber) {
@@ -84,14 +94,13 @@ const getUpcomingLaunches = () => {
     return exports.launches.filter((launch) => today <= new Date(launch.launchDate) && launch.upcoming !== false);
 };
 exports.getUpcomingLaunches = getUpcomingLaunches;
-const getLatestFlightNumber = () => __awaiter(void 0, void 0, void 0, function* () {
+const getLatestflightNumber = () => __awaiter(void 0, void 0, void 0, function* () {
     const latestRecord = yield launches_mongo_1.default.find().sort('-flightNumber');
     if (!latestRecord) {
-        return DEFAULT_FLIGHT_NUMBER;
+        return DEFAULT_FLIGHT_number;
     }
     else {
         return latestRecord[0].flightNumber;
     }
 });
-exports.getLatestFlightNumber = getLatestFlightNumber;
-(0, exports.getLatestFlightNumber)().then((d) => console.log(d));
+exports.getLatestflightNumber = getLatestflightNumber;

@@ -2,8 +2,8 @@ import { Request, Response } from 'express'
 
 import {
   getAllLaunches,
-  addNewLaunch,
-  getLaunchByFlightNumber,
+  scheduleNewLaunch,
+  getLaunchByflightNumber,
   abortLaunch,
   getHistoricalLaunches,
   getUpcomingLaunches,
@@ -13,14 +13,9 @@ export const httpGetAllLaunches = async (req: Request, res: Response) => {
   return res.status(200).json(await getAllLaunches())
 }
 
-export const httpAddLaunch = (req: Request, res: Response) => {
+export const httpAddLaunch = async (req: Request, res: Response) => {
   const launch = req.body
-  console.log(
-    launch.mission,
-    !launch.rocket,
-    !launch.launchDate,
-    !launch.destination,
-  )
+
   if (
     !launch.mission ||
     !launch.rocket ||
@@ -34,13 +29,17 @@ export const httpAddLaunch = (req: Request, res: Response) => {
   if (isNaN(launch.launchDate)) {
     return res.status(400).json({ error: 'invalid launch date' })
   }
-  addNewLaunch(launch)
-  return res.status(201).json(getAllLaunches())
+  try {
+    await scheduleNewLaunch(launch)
+    return res.status(201).json(await getAllLaunches())
+  } catch (err) {
+    res.status(404).json({ message: err.message })
+  }
 }
 
 export const httpDeleteLaunch = (req: Request, res: Response) => {
   const flightNumber = Number(req.params.flightNumber)
-  let launch = getLaunchByFlightNumber(flightNumber)
+  let launch = getLaunchByflightNumber(flightNumber)
 
   if (launch.length > 0) {
     launch = abortLaunch(flightNumber)

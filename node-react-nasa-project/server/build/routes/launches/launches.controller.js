@@ -15,9 +15,8 @@ const httpGetAllLaunches = (req, res) => __awaiter(void 0, void 0, void 0, funct
     return res.status(200).json(yield (0, launches_model_1.getAllLaunches)());
 });
 exports.httpGetAllLaunches = httpGetAllLaunches;
-const httpAddLaunch = (req, res) => {
+const httpAddLaunch = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const launch = req.body;
-    console.log(launch.mission, !launch.rocket, !launch.launchDate, !launch.destination);
     if (!launch.mission ||
         !launch.rocket ||
         !launch.launchDate ||
@@ -28,13 +27,18 @@ const httpAddLaunch = (req, res) => {
     if (isNaN(launch.launchDate)) {
         return res.status(400).json({ error: 'invalid launch date' });
     }
-    (0, launches_model_1.addNewLaunch)(launch);
-    return res.status(201).json((0, launches_model_1.getAllLaunches)());
-};
+    try {
+        yield (0, launches_model_1.scheduleNewLaunch)(launch);
+        return res.status(201).json(yield (0, launches_model_1.getAllLaunches)());
+    }
+    catch (err) {
+        res.status(404).json({ message: err.message });
+    }
+});
 exports.httpAddLaunch = httpAddLaunch;
 const httpDeleteLaunch = (req, res) => {
     const flightNumber = Number(req.params.flightNumber);
-    let launch = (0, launches_model_1.getLaunchByFlightNumber)(flightNumber);
+    let launch = (0, launches_model_1.getLaunchByflightNumber)(flightNumber);
     if (launch.length > 0) {
         launch = (0, launches_model_1.abortLaunch)(flightNumber);
         return res.status(200).json(launch);

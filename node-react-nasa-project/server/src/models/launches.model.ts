@@ -1,7 +1,7 @@
 import Launches from './launches.mongo'
 import { getPlanetByName } from './planets.model'
 type launchInterface = {
-  flightNumber: Number
+  flightNumber: number
   mission: string
   rocket: string
   launchDate: Date
@@ -10,8 +10,8 @@ type launchInterface = {
   upcoming: boolean
   success: boolean
 }
-const DEFAULT_FLIGHT_NUMBER = 100
-let latestFlightNumber = 100
+const DEFAULT_FLIGHT_number = 100
+let latestflightNumber = 100
 export const launches: launchInterface[] = [
   {
     flightNumber: 1,
@@ -50,23 +50,34 @@ export const getAllLaunches = async () => {
   return await Launches.find({}, { __v: 0, _id: 0 })
 }
 
-export const addNewLaunch = (launch: any): void => {
-  latestFlightNumber++
-  const newLaunch: launchInterface = {
-    flightNumber: latestFlightNumber,
+export const scheduleNewLaunch = async (launch: any): Promise<void> => {
+  const flightNum = await getLatestflightNumber()
+  await saveLaunch({
+    ...launch,
     success: true,
     upcoming: true,
-    customer: ['Rupam Swain'],
-    ...launch,
-  }
-  launches.push(newLaunch)
+    customer: ['Rupam'],
+    flightNumber: flightNum + 1,
+  })
 }
 
-export const getLaunchByFlightNumber = (flightNumber: Number) => {
+// export const addNewLaunch = (launch: any): void => {
+//   latestflightNumber++
+//   const newLaunch: launchInterface = {
+//     flightNumber: latestflightNumber,
+//     success: true,
+//     upcoming: true,
+//     customer: ['Rupam Swain'],
+//     ...launch,
+//   }
+//   launches.push(newLaunch
+// }
+
+export const getLaunchByflightNumber = (flightNumber: number) => {
   return launches.filter((launch) => launch.flightNumber === flightNumber)
 }
 
-export const abortLaunch = (flightNumber: Number) => {
+export const abortLaunch = (flightNumber: number) => {
   return launches.filter((launch) => {
     if (launch.flightNumber === flightNumber) {
       launch.upcoming = false
@@ -92,13 +103,12 @@ export const getUpcomingLaunches = (): launchInterface[] => {
   )
 }
 
-export const getLatestFlightNumber = async () => {
+export const getLatestflightNumber = async () => {
   const latestRecord = await Launches.find().sort('-flightNumber')
 
   if (!latestRecord) {
-    return DEFAULT_FLIGHT_NUMBER
+    return DEFAULT_FLIGHT_number
   } else {
     return latestRecord[0].flightNumber
   }
 }
-getLatestFlightNumber().then((d) => console.log(d))
