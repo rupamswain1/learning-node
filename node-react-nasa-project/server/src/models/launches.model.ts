@@ -73,33 +73,48 @@ export const scheduleNewLaunch = async (launch: any): Promise<void> => {
 //   launches.push(newLaunch
 // }
 
-export const getLaunchByflightNumber = (flightNumber: number) => {
-  return launches.filter((launch) => launch.flightNumber === flightNumber)
+export const getLaunchByflightNumber = async (flightNumber: number) => {
+  return await Launches.find({ flightNumber: flightNumber }, { _id: 0, __v: 0 })
 }
 
-export const abortLaunch = (flightNumber: number) => {
-  return launches.filter((launch) => {
-    if (launch.flightNumber === flightNumber) {
-      launch.upcoming = false
-      launch.success = false
-      return launch
-    }
-  })
+export const abortLaunch = async (flightNumber: number): Promise<boolean> => {
+  const abortedLaunch = await Launches.updateOne(
+    { flightNumber: flightNumber },
+    {
+      upcoming: false,
+      success: false,
+    },
+  )
+
+  return abortedLaunch.acknowledged && abortedLaunch.matchedCount > 0
 }
 
-export const getHistoricalLaunches = (): launchInterface[] => {
+export const getHistoricalLaunches = async (): Promise<launchInterface[]> => {
   const today = new Date()
-  return launches.filter(
-    (launch) =>
-      today > new Date(launch.launchDate) || launch.upcoming === false,
+  return await Launches.find(
+    {
+      $or: [
+        { launchDate: { $lt: today } },
+        { upcoming: false },
+        { success: false },
+      ],
+    },
+    { __v: 0, _id: 0 },
   )
 }
 
-export const getUpcomingLaunches = (): launchInterface[] => {
+export const getUpcomingLaunches = async (): Promise<launchInterface[]> => {
   const today = new Date()
-  return launches.filter(
-    (launch) =>
-      today <= new Date(launch.launchDate) && launch.upcoming !== false,
+
+  return await Launches.find(
+    {
+      $and: [
+        { upcoming: true },
+        { success: true },
+        { launchDate: { $gte: today } },
+      ],
+    },
+    { _id: 0, __v: 0 },
   )
 }
 

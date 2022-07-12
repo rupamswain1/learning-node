@@ -31,29 +31,36 @@ export const httpAddLaunch = async (req: Request, res: Response) => {
   }
   try {
     await scheduleNewLaunch(launch)
+    console.log(launch)
     return res.status(201).json(await getAllLaunches())
   } catch (err) {
     res.status(404).json({ message: err.message })
   }
 }
 
-export const httpDeleteLaunch = (req: Request, res: Response) => {
+export const httpDeleteLaunch = async (req: Request, res: Response) => {
   const flightNumber = Number(req.params.flightNumber)
-  let launch = getLaunchByflightNumber(flightNumber)
+  let launch = await getLaunchByflightNumber(flightNumber)
 
   if (launch.length > 0) {
-    launch = abortLaunch(flightNumber)
-    return res.status(200).json(launch)
+    console.log('inside if')
+    const success = await abortLaunch(flightNumber)
+    console.log(success)
+    if (success) {
+      return res.status(200).json(launch)
+    } else {
+      return res.status(500).json({ message: 'launch failed' })
+    }
   }
   return res.status(400).json(`FlightNumber: ${flightNumber} is not found`)
 }
 
-export const httpGetHistoricalLaunch = (req: Request, res: Response) => {
-  const historicalLaunches = getHistoricalLaunches()
+export const httpGetHistoricalLaunch = async (req: Request, res: Response) => {
+  const historicalLaunches = await getHistoricalLaunches()
   return res.status(200).json(historicalLaunches)
 }
 
-export const httpGetUpcomingLaunch = (req: Request, res: Response) => {
-  const upcomingLaunch = getUpcomingLaunches()
+export const httpGetUpcomingLaunch = async (req: Request, res: Response) => {
+  const upcomingLaunch = await getUpcomingLaunches()
   return res.status(200).json(upcomingLaunch)
 }

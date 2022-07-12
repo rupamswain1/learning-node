@@ -29,6 +29,7 @@ const httpAddLaunch = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     }
     try {
         yield (0, launches_model_1.scheduleNewLaunch)(launch);
+        console.log(launch);
         return res.status(201).json(yield (0, launches_model_1.getAllLaunches)());
     }
     catch (err) {
@@ -36,23 +37,30 @@ const httpAddLaunch = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     }
 });
 exports.httpAddLaunch = httpAddLaunch;
-const httpDeleteLaunch = (req, res) => {
+const httpDeleteLaunch = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const flightNumber = Number(req.params.flightNumber);
-    let launch = (0, launches_model_1.getLaunchByflightNumber)(flightNumber);
+    let launch = yield (0, launches_model_1.getLaunchByflightNumber)(flightNumber);
     if (launch.length > 0) {
-        launch = (0, launches_model_1.abortLaunch)(flightNumber);
-        return res.status(200).json(launch);
+        console.log('inside if');
+        const success = yield (0, launches_model_1.abortLaunch)(flightNumber);
+        console.log(success);
+        if (success) {
+            return res.status(200).json(launch);
+        }
+        else {
+            return res.status(500).json({ message: 'launch failed' });
+        }
     }
     return res.status(400).json(`FlightNumber: ${flightNumber} is not found`);
-};
+});
 exports.httpDeleteLaunch = httpDeleteLaunch;
-const httpGetHistoricalLaunch = (req, res) => {
-    const historicalLaunches = (0, launches_model_1.getHistoricalLaunches)();
+const httpGetHistoricalLaunch = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const historicalLaunches = yield (0, launches_model_1.getHistoricalLaunches)();
     return res.status(200).json(historicalLaunches);
-};
+});
 exports.httpGetHistoricalLaunch = httpGetHistoricalLaunch;
-const httpGetUpcomingLaunch = (req, res) => {
-    const upcomingLaunch = (0, launches_model_1.getUpcomingLaunches)();
+const httpGetUpcomingLaunch = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const upcomingLaunch = yield (0, launches_model_1.getUpcomingLaunches)();
     return res.status(200).json(upcomingLaunch);
-};
+});
 exports.httpGetUpcomingLaunch = httpGetUpcomingLaunch;

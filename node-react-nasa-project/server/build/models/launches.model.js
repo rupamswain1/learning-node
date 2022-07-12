@@ -70,29 +70,39 @@ exports.scheduleNewLaunch = scheduleNewLaunch;
 //   }
 //   launches.push(newLaunch
 // }
-const getLaunchByflightNumber = (flightNumber) => {
-    return exports.launches.filter((launch) => launch.flightNumber === flightNumber);
-};
+const getLaunchByflightNumber = (flightNumber) => __awaiter(void 0, void 0, void 0, function* () {
+    return yield launches_mongo_1.default.find({ flightNumber: flightNumber }, { _id: 0, __v: 0 });
+});
 exports.getLaunchByflightNumber = getLaunchByflightNumber;
-const abortLaunch = (flightNumber) => {
-    return exports.launches.filter((launch) => {
-        if (launch.flightNumber === flightNumber) {
-            launch.upcoming = false;
-            launch.success = false;
-            return launch;
-        }
+const abortLaunch = (flightNumber) => __awaiter(void 0, void 0, void 0, function* () {
+    const abortedLaunch = yield launches_mongo_1.default.updateOne({ flightNumber: flightNumber }, {
+        upcoming: false,
+        success: false,
     });
-};
+    return abortedLaunch.acknowledged && abortedLaunch.matchedCount > 0;
+});
 exports.abortLaunch = abortLaunch;
-const getHistoricalLaunches = () => {
+const getHistoricalLaunches = () => __awaiter(void 0, void 0, void 0, function* () {
     const today = new Date();
-    return exports.launches.filter((launch) => today > new Date(launch.launchDate) || launch.upcoming === false);
-};
+    return yield launches_mongo_1.default.find({
+        $or: [
+            { launchDate: { $lt: today } },
+            { upcoming: false },
+            { success: false },
+        ],
+    }, { __v: 0, _id: 0 });
+});
 exports.getHistoricalLaunches = getHistoricalLaunches;
-const getUpcomingLaunches = () => {
+const getUpcomingLaunches = () => __awaiter(void 0, void 0, void 0, function* () {
     const today = new Date();
-    return exports.launches.filter((launch) => today <= new Date(launch.launchDate) && launch.upcoming !== false);
-};
+    return yield launches_mongo_1.default.find({
+        $and: [
+            { upcoming: true },
+            { success: true },
+            { launchDate: { $gte: today } },
+        ],
+    }, { _id: 0, __v: 0 });
+});
 exports.getUpcomingLaunches = getUpcomingLaunches;
 const getLatestflightNumber = () => __awaiter(void 0, void 0, void 0, function* () {
     const latestRecord = yield launches_mongo_1.default.find().sort('-flightNumber');
