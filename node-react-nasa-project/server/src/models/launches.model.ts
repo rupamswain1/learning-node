@@ -118,10 +118,10 @@ export const getUpcomingLaunches = async (): Promise<launchInterface[]> => {
   )
 }
 
-export const getLatestflightNumber = async () => {
+export const getLatestflightNumber = async (): Promise<number> => {
   const latestRecord = await Launches.find().sort('-flightNumber')
 
-  if (!latestRecord) {
+  if (latestRecord.length === 0) {
     return DEFAULT_FLIGHT_number
   } else {
     return latestRecord[0].flightNumber

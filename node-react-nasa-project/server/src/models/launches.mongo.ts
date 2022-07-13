@@ -1,7 +1,7 @@
 import { Schema, model } from 'mongoose'
 
 interface launchInterface {
-  flightNumber: Number
+  flightNumber: number
   mission: string
   rocket: string
   launchDate: Date

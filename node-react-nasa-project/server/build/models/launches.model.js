@@ -106,7 +106,7 @@ const getUpcomingLaunches = () => __awaiter(void 0, void 0, void 0, function* ()
 exports.getUpcomingLaunches = getUpcomingLaunches;
 const getLatestflightNumber = () => __awaiter(void 0, void 0, void 0, function* () {
     const latestRecord = yield launches_mongo_1.default.find().sort('-flightNumber');
-    if (!latestRecord) {
+    if (latestRecord.length === 0) {
         return DEFAULT_FLIGHT_number;
     }
     else {

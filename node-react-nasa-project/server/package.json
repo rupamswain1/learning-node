@@ -8,11 +8,12 @@
     "start:run": "PORT=8000 nodemon ./build/server.js",
     "start": "concurrently npm:start:*",
     "cluster":"pm2 start ./build/server.js -i max",
-    "test": "jest"
+    "test": "jest --setupFiles dotenv/config"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
+
   "devDependencies": {
     "@types/cors": "^2.8.12",
     "@types/jest": "^28.1.1",

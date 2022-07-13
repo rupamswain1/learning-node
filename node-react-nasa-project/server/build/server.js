@@ -35,23 +35,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const http_1 = __importDefault(require("http"));
-const mongoose_1 = require("mongoose");
 const dotenv = __importStar(require("dotenv"));
-const app_1 = __importDefault(require("./app"));
-const planets_model_1 = require("./models/planets.model");
 dotenv.config();
+const http_1 = __importDefault(require("http"));
+const app_1 = __importDefault(require("./app"));
+const mongoDB_1 = require("./services/mongoDB");
+const planets_model_1 = require("./models/planets.model");
 const PORT = process.env.PORT || 8000;
-const MONGO_URL = process.env.mongo_url || 'dummy url';
-mongoose_1.connection.once('open', () => {
-    console.log('MongoDB connection Eshtablished');
-});
-mongoose_1.connection.on('error', () => {
-    console.log('mongoDB connection failed');
-});
 const server = http_1.default.createServer(app_1.default);
 const startServer = () => __awaiter(void 0, void 0, void 0, function* () {
-    yield (0, mongoose_1.connect)(MONGO_URL);
+    yield (0, mongoDB_1.mongoConnect)();
     yield (0, planets_model_1.loadPlanets)();
     server.listen(PORT, () => {
         console.log(`Listining on port ${PORT}`);
