@@ -48,18 +48,18 @@ describe('test Launch API', () => {
   }
   describe('test POST /launches', () => {
     test('it should test 201 status for /launches', async () => {
-      const response = await request(app).post('/launches').send(addLaunch)
+      const response = await request(app).post('/v1/launches').send(addLaunch)
       expect(response.statusCode).toBe(201)
     })
 
     test('it should test 400 status for /launches, when body is blank', async () => {
-      const response = await request(app).post('/launches')
+      const response = await request(app).post('/v1/launches')
       expect(response.statusCode).toBe(400)
     })
 
     test('it should give invalid date message when the date is provided incorrectly', async () => {
       const response = await request(app)
-        .post('/launches')
+        .post('/v1/launches')
         .send({
           mission: 'moon',
           rocket: 'chandra yaan',
@@ -74,7 +74,7 @@ describe('test Launch API', () => {
 
     test('it should give invalid error when any of the required property is missing', async () => {
       const response = await request(app)
-        .post('/launches')
+        .post('/v1/launches')
         .send({
           missions: 'moon',
           rocket: 'chandra yaan',
@@ -88,7 +88,7 @@ describe('test Launch API', () => {
     })
 
     test('it should add the data for correct set of data in /launches', async () => {
-      const response = await request(app).post('/launches').send(addLaunch2)
+      const response = await request(app).post('/v1/launches').send(addLaunch2)
 
       expect(response.statusCode).toBe(201)
       expect(response.body[1]).toMatchObject({
@@ -120,32 +120,32 @@ describe('test Launch API', () => {
 
   describe('test GET /launches', () => {
     test('it should test 200 status for /launches launch', async () => {
-      const response = await request(app).get('/launches')
+      const response = await request(app).get('/v1/launches')
 
       expect(response.statusCode).toBe(200)
     })
 
     test('it should validate body of response for /launches', async () => {
-      const response = await request(app).get('/launches')
+      const response = await request(app).get('/v1/launches')
       expect(response.body).toMatchObject(launches)
     })
 
     test('it should test 200 status for /launches/upcoming launch', async () => {
-      const response = await request(app).get('/launches/upcoming')
+      const response = await request(app).get('/v1/launches/upcoming')
       expect(response.statusCode).toBe(200)
     })
 
     test('it should validate body of response for /launches/upcoming', async () => {
-      const response = await request(app).get('/launches/upcoming')
+      const response = await request(app).get('/v1/launches/upcoming')
       expect(response.body[0]).toMatchObject(launches[1])
     })
 
     test('it should test 200 status for /launches/history launch', async () => {
-      const response = await request(app).get('/launches/history')
+      const response = await request(app).get('/v1/launches/history')
       expect(response.statusCode).toBe(200)
     })
     test('it should validate body of response for /launches/history', async () => {
-      const response = await request(app).get('/launches/history')
+      const response = await request(app).get('/v1/launches/history')
       expect(response.body[0]).toMatchObject(launches[0])
     })
   })
@@ -153,7 +153,7 @@ describe('test Launch API', () => {
   describe('test errors from POST launches', () => {
     test('it should catch the invalid date error', async () => {
       const response = await request(app)
-        .post('/launches')
+        .post('/v1/launches')
         .send(invalidDateLaunch)
         .expect('Content-Type', /json/)
         .expect(400)
@@ -164,7 +164,7 @@ describe('test Launch API', () => {
 
     test('it should catch the missing required attribute error', async () => {
       const response = await request(app)
-        .post('/launches')
+        .post('/v1/launches')
         .send(incompleteData)
         .expect('Content-Type', /json/)
         .expect(400)

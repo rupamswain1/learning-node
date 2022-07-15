@@ -22,7 +22,7 @@ function Homepage() {
   const [error, setError] = useState<string>();
   const [launchSuccess, setlaunchSuccess] = useState<boolean>(true);
   useEffect(() => {
-    axios.get('http://localhost:8000/planets')
+    axios.get('http://localhost:8000/v1/planets')
       .then(res => setExoPlanets(res.data))
   }, [])
 
@@ -58,7 +58,7 @@ function Homepage() {
       setlaunchData((prevState) => { return { ...prevState, launchDate: launchDate, mission: missionName, rocket: rocketType, destination: destination } })
       console.log(launchData)
       setlaunchSuccess(false)
-      axios.post('http://localhost:8000/launches', { launchDate: launchDate, mission: missionName, rocket: rocketType, destination: destination })
+      axios.post('http://localhost:8000/v1/launches', { launchDate: launchDate, mission: missionName, rocket: rocketType, destination: destination })
         .then(response => {
           setlaunchSuccess(true)
         })

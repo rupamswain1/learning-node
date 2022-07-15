@@ -58,16 +58,16 @@ describe('test Launch API', () => {
     };
     describe('test POST /launches', () => {
         test('it should test 201 status for /launches', () => __awaiter(void 0, void 0, void 0, function* () {
-            const response = yield (0, supertest_1.default)(app_1.default).post('/launches').send(addLaunch);
+            const response = yield (0, supertest_1.default)(app_1.default).post('/v1/launches').send(addLaunch);
             expect(response.statusCode).toBe(201);
         }));
         test('it should test 400 status for /launches, when body is blank', () => __awaiter(void 0, void 0, void 0, function* () {
-            const response = yield (0, supertest_1.default)(app_1.default).post('/launches');
+            const response = yield (0, supertest_1.default)(app_1.default).post('/v1/launches');
             expect(response.statusCode).toBe(400);
         }));
         test('it should give invalid date message when the date is provided incorrectly', () => __awaiter(void 0, void 0, void 0, function* () {
             const response = yield (0, supertest_1.default)(app_1.default)
-                .post('/launches')
+                .post('/v1/launches')
                 .send({
                 mission: 'moon',
                 rocket: 'chandra yaan',
@@ -80,7 +80,7 @@ describe('test Launch API', () => {
         }));
         test('it should give invalid error when any of the required property is missing', () => __awaiter(void 0, void 0, void 0, function* () {
             const response = yield (0, supertest_1.default)(app_1.default)
-                .post('/launches')
+                .post('/v1/launches')
                 .send({
                 missions: 'moon',
                 rocket: 'chandra yaan',
@@ -92,7 +92,7 @@ describe('test Launch API', () => {
             expect(response.body).toMatchObject({ error: 'invalid launch property' });
         }));
         test('it should add the data for correct set of data in /launches', () => __awaiter(void 0, void 0, void 0, function* () {
-            const response = yield (0, supertest_1.default)(app_1.default).post('/launches').send(addLaunch2);
+            const response = yield (0, supertest_1.default)(app_1.default).post('/v1/launches').send(addLaunch2);
             expect(response.statusCode).toBe(201);
             expect(response.body[1]).toMatchObject({
                 flightNumber: 102,
@@ -122,34 +122,34 @@ describe('test Launch API', () => {
     };
     describe('test GET /launches', () => {
         test('it should test 200 status for /launches launch', () => __awaiter(void 0, void 0, void 0, function* () {
-            const response = yield (0, supertest_1.default)(app_1.default).get('/launches');
+            const response = yield (0, supertest_1.default)(app_1.default).get('/v1/launches');
             expect(response.statusCode).toBe(200);
         }));
         test('it should validate body of response for /launches', () => __awaiter(void 0, void 0, void 0, function* () {
-            const response = yield (0, supertest_1.default)(app_1.default).get('/launches');
+            const response = yield (0, supertest_1.default)(app_1.default).get('/v1/launches');
             expect(response.body).toMatchObject(launches);
         }));
         test('it should test 200 status for /launches/upcoming launch', () => __awaiter(void 0, void 0, void 0, function* () {
-            const response = yield (0, supertest_1.default)(app_1.default).get('/launches/upcoming');
+            const response = yield (0, supertest_1.default)(app_1.default).get('/v1/launches/upcoming');
             expect(response.statusCode).toBe(200);
         }));
         test('it should validate body of response for /launches/upcoming', () => __awaiter(void 0, void 0, void 0, function* () {
-            const response = yield (0, supertest_1.default)(app_1.default).get('/launches/upcoming');
+            const response = yield (0, supertest_1.default)(app_1.default).get('/v1/launches/upcoming');
             expect(response.body[0]).toMatchObject(launches[1]);
         }));
         test('it should test 200 status for /launches/history launch', () => __awaiter(void 0, void 0, void 0, function* () {
-            const response = yield (0, supertest_1.default)(app_1.default).get('/launches/history');
+            const response = yield (0, supertest_1.default)(app_1.default).get('/v1/launches/history');
             expect(response.statusCode).toBe(200);
         }));
         test('it should validate body of response for /launches/history', () => __awaiter(void 0, void 0, void 0, function* () {
-            const response = yield (0, supertest_1.default)(app_1.default).get('/launches/history');
+            const response = yield (0, supertest_1.default)(app_1.default).get('/v1/launches/history');
             expect(response.body[0]).toMatchObject(launches[0]);
         }));
     });
     describe('test errors from POST launches', () => {
         test('it should catch the invalid date error', () => __awaiter(void 0, void 0, void 0, function* () {
             const response = yield (0, supertest_1.default)(app_1.default)
-                .post('/launches')
+                .post('/v1/launches')
                 .send(invalidDateLaunch)
                 .expect('Content-Type', /json/)
                 .expect(400);
@@ -159,7 +159,7 @@ describe('test Launch API', () => {
         }));
         test('it should catch the missing required attribute error', () => __awaiter(void 0, void 0, void 0, function* () {
             const response = yield (0, supertest_1.default)(app_1.default)
-                .post('/launches')
+                .post('/v1/launches')
                 .send(incompleteData)
                 .expect('Content-Type', /json/)
                 .expect(400);
