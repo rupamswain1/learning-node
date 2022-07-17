@@ -7,13 +7,12 @@
     "start:build": "tsc -w",
     "start:run": "PORT=8000 nodemon ./build/server.js",
     "start": "concurrently npm:start:*",
-    "cluster":"pm2 start ./build/server.js -i max",
+    "cluster": "pm2 start ./build/server.js -i max",
     "test": "jest --setupFiles dotenv/config"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-
   "devDependencies": {
     "@types/cors": "^2.8.12",
     "@types/jest": "^28.1.1",
@@ -25,6 +24,7 @@
     "ts-jest": "^28.0.4"
   },
   "dependencies": {
+    "axios": "^0.27.2",
     "cors": "^2.8.5",
     "csv-parse": "^5.0.4",
     "jest": "^28.1.1",

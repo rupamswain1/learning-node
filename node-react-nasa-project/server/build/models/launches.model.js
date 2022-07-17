@@ -12,7 +12,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getLatestflightNumber = exports.getUpcomingLaunches = exports.getHistoricalLaunches = exports.abortLaunch = exports.getLaunchByflightNumber = exports.scheduleNewLaunch = exports.getAllLaunches = exports.saveLaunch = exports.launches = void 0;
+exports.loadLaunchData = exports.getLatestflightNumber = exports.getUpcomingLaunches = exports.getHistoricalLaunches = exports.abortLaunch = exports.getLaunchByflightNumber = exports.scheduleNewLaunch = exports.getLaunchByfilter = exports.getAllLaunches = exports.saveLaunch = exports.launches = void 0;
+const axios_1 = __importDefault(require("axios"));
 const launches_mongo_1 = __importDefault(require("./launches.mongo"));
 const planets_model_1 = require("./planets.model");
 const DEFAULT_FLIGHT_number = 100;
@@ -54,6 +55,10 @@ const getAllLaunches = () => __awaiter(void 0, void 0, void 0, function* () {
     return yield launches_mongo_1.default.find({}, { __v: 0, _id: 0 });
 });
 exports.getAllLaunches = getAllLaunches;
+const getLaunchByfilter = (filter) => __awaiter(void 0, void 0, void 0, function* () {
+    return yield launches_mongo_1.default.find(filter, { _id: 0, __v: 0 });
+});
+exports.getLaunchByfilter = getLaunchByfilter;
 const scheduleNewLaunch = (launch) => __awaiter(void 0, void 0, void 0, function* () {
     const flightNum = yield (0, exports.getLatestflightNumber)();
     yield (0, exports.saveLaunch)(Object.assign(Object.assign({}, launch), { success: true, upcoming: true, customer: ['Rupam'], flightNumber: flightNum + 1 }));
@@ -114,3 +119,59 @@ const getLatestflightNumber = () => __awaiter(void 0, void 0, void 0, function* 
     }
 });
 exports.getLatestflightNumber = getLatestflightNumber;
+const SPACEX_URL = 'https://api.spacexdata.com/v5/launches/query';
+const loadSpaceXdata = () => __awaiter(void 0, void 0, void 0, function* () {
+    const response = yield axios_1.default.post(SPACEX_URL, {
+        query: {},
+        options: {
+            pagination: false,
+            populate: [
+                {
+                    path: 'rocket',
+                    select: {
+                        name: 1,
+                    },
+                },
+                {
+                    path: 'payloads',
+                    select: {
+                        customers: 1,
+                    },
+                },
+            ],
+        },
+    });
+    const launches = response.data.docs;
+    launches.forEach((spacexLaunch) => {
+        const payloads = spacexLaunch.payloads;
+        const customers = payloads.flatMap((payload) => {
+            return payload['customers'];
+            //payload['customers']
+        });
+        const launch = {
+            flightNumber: spacexLaunch.flight_number,
+            mission: spacexLaunch.name,
+            rocket: spacexLaunch.rocket.name,
+            launchDate: spacexLaunch.date_local,
+            upcoming: spacexLaunch.upcoming,
+            success: spacexLaunch.success,
+            customer: customers,
+        };
+        console.log(launch);
+    });
+});
+const loadLaunchData = () => __awaiter(void 0, void 0, void 0, function* () {
+    const existingLaunch = yield (0, exports.getLaunchByfilter)({
+        rocket: 'Falcon 1',
+        flightNumber: 1,
+        launchData: '2006-03-25T10:30:00+12:00',
+    });
+    if (existingLaunch.length > 0) {
+        console.log('Launch Exists');
+    }
+    else {
+        console.log('Downloading launch data');
+        yield loadSpaceXdata();
+    }
+});
+exports.loadLaunchData = loadLaunchData;

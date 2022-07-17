@@ -41,11 +41,13 @@ const http_1 = __importDefault(require("http"));
 const app_1 = __importDefault(require("./app"));
 const mongoDB_1 = require("./services/mongoDB");
 const planets_model_1 = require("./models/planets.model");
+const launches_model_1 = require("./models/launches.model");
 const PORT = process.env.PORT || 8000;
 const server = http_1.default.createServer(app_1.default);
 const startServer = () => __awaiter(void 0, void 0, void 0, function* () {
     yield (0, mongoDB_1.mongoConnect)();
     yield (0, planets_model_1.loadPlanets)();
+    yield (0, launches_model_1.loadLaunchData)();
     server.listen(PORT, () => {
         console.log(`Listining on port ${PORT}`);
     });

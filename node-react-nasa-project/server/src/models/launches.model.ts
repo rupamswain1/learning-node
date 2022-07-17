@@ -1,3 +1,4 @@
+import axios from 'axios'
 import Launches from './launches.mongo'
 import { getPlanetByName } from './planets.model'
 type launchInterface = {
@@ -48,6 +49,10 @@ export const saveLaunch = async (launch: launchInterface) => {
 
 export const getAllLaunches = async () => {
   return await Launches.find({}, { __v: 0, _id: 0 })
+}
+
+export const getLaunchByfilter = async (filter: any) => {
+  return await Launches.find(filter, { _id: 0, __v: 0 })
 }
 
 export const scheduleNewLaunch = async (launch: any): Promise<void> => {
@@ -125,5 +130,67 @@ export const getLatestflightNumber = async (): Promise<number> => {
     return DEFAULT_FLIGHT_number
   } else {
     return latestRecord[0].flightNumber
+  }
+}
+
+const SPACEX_URL = 'https://api.spacexdata.com/v5/launches/query'
+const loadSpaceXdata = async () => {
+  const response = await axios.post(SPACEX_URL, {
+    query: {},
+    options: {
+      pagination: false,
+      populate: [
+        {
+          path: 'rocket',
+          select: {
+            name: 1,
+          },
+        },
+        {
+          path: 'payloads',
+          select: {
+            customers: 1,
+          },
+        },
+      ],
+    },
+  })
+
+  const launches = response.data.docs
+  launches.forEach((spacexLaunch: any) => {
+    const payloads = spacexLaunch.payloads
+
+    const customers = payloads.flatMap(
+      (payload: { customers: string[]; id: string }[]) => {
+        return (payload as { [key: string]: any })['customers'] as string
+        //payload['customers']
+      },
+    )
+
+    const launch = {
+      flightNumber: spacexLaunch.flight_number,
+      mission: spacexLaunch.name,
+      rocket: spacexLaunch.rocket.name,
+      launchDate: spacexLaunch.date_local,
+      upcoming: spacexLaunch.upcoming,
+      success: spacexLaunch.success,
+      customer: customers,
+    }
+    console.log(launch)
+  })
+}
+
+export const loadLaunchData = async (): Promise<void> => {
+  const existingLaunch = await getLaunchByfilter({
+    rocket: 'Falcon 1',
+    flightNumber: 1,
+    launchData: '2006-03-25T10:30:00+12:00',
+  })
+
+  if (existingLaunch.length > 0) {
+    console.log('Launch Exists')
+  } else {
+    console.log('Downloading launch data')
+    await loadSpaceXdata()
   }
 }
