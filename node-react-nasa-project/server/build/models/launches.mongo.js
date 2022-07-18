@@ -21,7 +21,6 @@ const LaunchSchema = new mongoose_1.Schema({
         type: Date,
     },
     destination: {
-        required: true,
         type: String,
     },
     customer: [String],

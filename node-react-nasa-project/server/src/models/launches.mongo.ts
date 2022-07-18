@@ -5,7 +5,7 @@ interface launchInterface {
   mission: string
   rocket: string
   launchDate: Date
-  destination: string
+  destination?: string
   customer: string[]
   upcoming: boolean
   success: boolean
@@ -31,7 +31,6 @@ const LaunchSchema = new Schema<launchInterface>({
     type: Date,
   },
   destination: {
-    required: true,
     type: String,
   },
   customer: [String],

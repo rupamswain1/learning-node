@@ -15,7 +15,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.loadLaunchData = exports.getLatestflightNumber = exports.getUpcomingLaunches = exports.getHistoricalLaunches = exports.abortLaunch = exports.getLaunchByflightNumber = exports.scheduleNewLaunch = exports.getLaunchByfilter = exports.getAllLaunches = exports.saveLaunch = exports.launches = void 0;
 const axios_1 = __importDefault(require("axios"));
 const launches_mongo_1 = __importDefault(require("./launches.mongo"));
-const planets_model_1 = require("./planets.model");
 const DEFAULT_FLIGHT_number = 100;
 let latestflightNumber = 100;
 exports.launches = [
@@ -41,10 +40,10 @@ exports.launches = [
     },
 ];
 const saveLaunch = (launch) => __awaiter(void 0, void 0, void 0, function* () {
-    const planet = yield (0, planets_model_1.getPlanetByName)(launch.destination);
-    if (!planet) {
-        throw new Error('planet not found');
-    }
+    // const planet = await getPlanetByName(launch.destination)
+    // if (!planet) {
+    //   throw new Error('planet not found')
+    // }
     yield launches_mongo_1.default.updateOne({ flightNumber: launch.flightNumber }, launch, {
         upsert: true,
     });
@@ -141,8 +140,12 @@ const loadSpaceXdata = () => __awaiter(void 0, void 0, void 0, function* () {
             ],
         },
     });
+    if (response.status !== 200) {
+        console.log('SpaceX data fetching failed');
+        throw new Error('SpaceX data fetching failed');
+    }
     const launches = response.data.docs;
-    launches.forEach((spacexLaunch) => {
+    for (const spacexLaunch of launches) {
         const payloads = spacexLaunch.payloads;
         const customers = payloads.flatMap((payload) => {
             return payload['customers'];
@@ -157,8 +160,8 @@ const loadSpaceXdata = () => __awaiter(void 0, void 0, void 0, function* () {
             success: spacexLaunch.success,
             customer: customers,
         };
-        console.log(launch);
-    });
+        yield (0, exports.saveLaunch)(launch);
+    }
 });
 const loadLaunchData = () => __awaiter(void 0, void 0, void 0, function* () {
     const existingLaunch = yield (0, exports.getLaunchByfilter)({

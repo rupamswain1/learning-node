@@ -6,7 +6,7 @@ type launchInterface = {
   mission: string
   rocket: string
   launchDate: Date
-  destination: string
+  destination?: string
   customer: string[]
   upcoming: boolean
   success: boolean
@@ -37,10 +37,10 @@ export const launches: launchInterface[] = [
 ]
 
 export const saveLaunch = async (launch: launchInterface) => {
-  const planet = await getPlanetByName(launch.destination)
-  if (!planet) {
-    throw new Error('planet not found')
-  }
+  // const planet = await getPlanetByName(launch.destination)
+  // if (!planet) {
+  //   throw new Error('planet not found')
+  // }
   await Launches.updateOne({ flightNumber: launch.flightNumber }, launch, {
     upsert: true,
   })
@@ -155,9 +155,12 @@ const loadSpaceXdata = async () => {
       ],
     },
   })
-
+  if (response.status !== 200) {
+    console.log('SpaceX data fetching failed')
+    throw new Error('SpaceX data fetching failed')
+  }
   const launches = response.data.docs
-  launches.forEach((spacexLaunch: any) => {
+  for (const spacexLaunch of launches) {
     const payloads = spacexLaunch.payloads
 
     const customers = payloads.flatMap(
@@ -176,8 +179,9 @@ const loadSpaceXdata = async () => {
       success: spacexLaunch.success,
       customer: customers,
     }
-    console.log(launch)
-  })
+
+    await saveLaunch(launch)
+  }
 }
 
 export const loadLaunchData = async (): Promise<void> => {
