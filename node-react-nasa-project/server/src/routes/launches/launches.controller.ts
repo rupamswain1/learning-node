@@ -9,8 +9,17 @@ import {
   getUpcomingLaunches,
 } from '../../models/launches.model'
 
+interface pagination {
+  page: number
+  limit: number
+}
+
 export const httpGetAllLaunches = async (req: Request, res: Response) => {
-  return res.status(200).json(await getAllLaunches())
+  let { page, limit } = (req.query as unknown) as pagination
+  page = Math.abs(+page) || 1
+  limit = Math.abs(+limit) || 0
+  const skip = Math.abs(limit * (page - 1))
+  return res.status(200).json(await getAllLaunches({ skip, limit }))
 }
 
 export const httpAddLaunch = async (req: Request, res: Response) => {
@@ -31,8 +40,8 @@ export const httpAddLaunch = async (req: Request, res: Response) => {
   }
   try {
     await scheduleNewLaunch(launch)
-    console.log(launch)
-    return res.status(201).json(await getAllLaunches())
+
+    return res.status(201).json(await getAllLaunches({ skip: 0, limit: 0 }))
   } catch (err) {
     res.status(404).json({ message: err.message })
   }

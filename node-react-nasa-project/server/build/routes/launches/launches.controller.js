@@ -12,7 +12,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.httpGetUpcomingLaunch = exports.httpGetHistoricalLaunch = exports.httpDeleteLaunch = exports.httpAddLaunch = exports.httpGetAllLaunches = void 0;
 const launches_model_1 = require("../../models/launches.model");
 const httpGetAllLaunches = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    return res.status(200).json(yield (0, launches_model_1.getAllLaunches)());
+    let { page, limit } = req.query;
+    page = Math.abs(+page) || 1;
+    limit = Math.abs(+limit) || 0;
+    const skip = Math.abs(limit * (page - 1));
+    return res.status(200).json(yield (0, launches_model_1.getAllLaunches)({ skip, limit }));
 });
 exports.httpGetAllLaunches = httpGetAllLaunches;
 const httpAddLaunch = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -29,8 +33,7 @@ const httpAddLaunch = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     }
     try {
         yield (0, launches_model_1.scheduleNewLaunch)(launch);
-        console.log(launch);
-        return res.status(201).json(yield (0, launches_model_1.getAllLaunches)());
+        return res.status(201).json(yield (0, launches_model_1.getAllLaunches)({ skip: 0, limit: 0 }));
     }
     catch (err) {
         res.status(404).json({ message: err.message });

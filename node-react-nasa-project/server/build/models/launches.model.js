@@ -50,8 +50,8 @@ const saveLaunch = (launch) => __awaiter(void 0, void 0, void 0, function* () {
 });
 exports.saveLaunch = saveLaunch;
 // saveLaunch(launches[0])
-const getAllLaunches = () => __awaiter(void 0, void 0, void 0, function* () {
-    return yield launches_mongo_1.default.find({}, { __v: 0, _id: 0 });
+const getAllLaunches = ({ skip, limit, }) => __awaiter(void 0, void 0, void 0, function* () {
+    return yield launches_mongo_1.default.find({}, { __v: 0, _id: 0 }).skip(skip).limit(limit);
 });
 exports.getAllLaunches = getAllLaunches;
 const getLaunchByfilter = (filter) => __awaiter(void 0, void 0, void 0, function* () {

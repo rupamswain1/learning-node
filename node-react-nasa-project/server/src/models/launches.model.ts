@@ -47,8 +47,14 @@ export const saveLaunch = async (launch: launchInterface) => {
 }
 // saveLaunch(launches[0])
 
-export const getAllLaunches = async () => {
-  return await Launches.find({}, { __v: 0, _id: 0 })
+export const getAllLaunches = async ({
+  skip,
+  limit,
+}: {
+  skip: number
+  limit: number
+}) => {
+  return await Launches.find({}, { __v: 0, _id: 0 }).skip(skip).limit(limit)
 }
 
 export const getLaunchByfilter = async (filter: any) => {
