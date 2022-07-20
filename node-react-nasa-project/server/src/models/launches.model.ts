@@ -54,7 +54,10 @@ export const getAllLaunches = async ({
   skip: number
   limit: number
 }) => {
-  return await Launches.find({}, { __v: 0, _id: 0 }).skip(skip).limit(limit)
+  return await Launches.find({}, { __v: 0, _id: 0 })
+    .sort({ flightNumber: 1 })
+    .skip(skip)
+    .limit(limit)
 }
 
 export const getLaunchByfilter = async (filter: any) => {
