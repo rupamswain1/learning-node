@@ -37,13 +37,18 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const dotenv = __importStar(require("dotenv"));
 dotenv.config();
-const http_1 = __importDefault(require("http"));
+const fs_1 = __importDefault(require("fs"));
+const https_1 = __importDefault(require("https"));
+// import http from 'http'
 const app_1 = __importDefault(require("./app"));
 const mongoDB_1 = require("./services/mongoDB");
 const planets_model_1 = require("./models/planets.model");
 const launches_model_1 = require("./models/launches.model");
 const PORT = process.env.PORT || 8000;
-const server = http_1.default.createServer(app_1.default);
+const server = https_1.default.createServer({
+    key: fs_1.default.readFileSync('key.pem'),
+    cert: fs_1.default.readFileSync('cert.pem'),
+}, app_1.default);
 const startServer = () => __awaiter(void 0, void 0, void 0, function* () {
     yield (0, mongoDB_1.mongoConnect)();
     yield (0, planets_model_1.loadPlanets)();
