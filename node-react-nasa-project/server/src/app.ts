@@ -1,10 +1,12 @@
 import express from 'express'
 import cors from 'cors'
 import api from './routes/api'
+import helmet from 'helmet'
 import path from 'path'
 import morgan from 'morgan'
-
 const app = express()
+
+app.use(helmet())
 app.use(
   cors({
     origin: 'http://localhost:3000',
