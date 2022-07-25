@@ -1,1 +1,2 @@
-mongo_url="mongo url"
+CLIENT_ID=from google
+CLIENT_SECRET=from google
