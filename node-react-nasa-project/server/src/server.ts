@@ -2,8 +2,8 @@ import * as dotenv from 'dotenv'
 dotenv.config()
 import fs from 'fs'
 
-import https from 'https'
-// import http from 'http'
+// import https from 'https'
+import http from 'http'
 
 import app from './app'
 import { mongoConnect } from './services/mongoDB'
@@ -12,13 +12,15 @@ import { loadLaunchData } from './models/launches.model'
 
 const PORT = process.env.PORT || 8000
 
-const server = https.createServer(
-  {
-    key: fs.readFileSync('key.pem'),
-    cert: fs.readFileSync('cert.pem'),
-  },
-  app,
-)
+// const server = https.createServer(
+//   {
+//     key: fs.readFileSync('key.pem'),
+//     cert: fs.readFileSync('cert.pem'),
+//   },
+//   app,
+// )
+
+const server = http.createServer(app)
 
 const startServer = async () => {
   await mongoConnect()
