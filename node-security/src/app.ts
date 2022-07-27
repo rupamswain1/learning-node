@@ -1,5 +1,6 @@
 require('dotenv').config()
-
+import cookieSession from 'cookie-session'
+import { config } from 'dotenv'
 import express from 'express'
 import helmet from 'helmet'
 import passport from 'passport'
@@ -9,6 +10,8 @@ import path from 'path'
 const CONFIG = {
   CLIENT_ID: process.env.CLIENT_ID || '',
   CLIENT_SECRET: process.env.CLIENT_SECRET || '',
+  COOKIE_1: process.env.COOKIE_1 || '',
+  COOKIE_2: process.env.COOKIE_2 || '',
 }
 // const AUTH_OPTIONS = {
 //   callbackURL: '/auth/google/callback',
@@ -36,6 +39,15 @@ passport.use(new Strategy(AUTH_OPTIONS, VerifyCallback))
 const app = express()
 
 app.use(helmet())
+
+app.use(
+  cookieSession({
+    name: 'session',
+    maxAge: 24 * 60 * 60 * 1000,
+    keys: [CONFIG.COOKIE_1, CONFIG.COOKIE_2],
+  }),
+)
+
 app.use(passport.initialize())
 
 app.get(
