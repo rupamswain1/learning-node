@@ -13,12 +13,6 @@ const CONFIG = {
   COOKIE_1: process.env.COOKIE_1 || '',
   COOKIE_2: process.env.COOKIE_2 || '',
 }
-// const AUTH_OPTIONS = {
-//   callbackURL: '/auth/google/callback',
-
-//   clientSecret: CONFIG.CLIENT_SECRET,
-//   clientID: CONFIG.CLIENT_ID,
-// }
 
 const AUTH_OPTIONS = {
   clientID: CONFIG.CLIENT_ID,
@@ -35,6 +29,14 @@ const VerifyCallback = (
   done(null, profile)
 }
 passport.use(new Strategy(AUTH_OPTIONS, VerifyCallback))
+//Save the session to the cookie
+passport.serializeUser((user, done) => {
+  done(null, user)
+})
+//Read the session from the cookie
+passport.deserializeUser((obj: any, done) => {
+  done(null, obj)
+})
 
 const app = express()
 
@@ -49,6 +51,7 @@ app.use(
 )
 
 app.use(passport.initialize())
+app.use(passport.session())
 
 app.get(
   '/auth/google',
@@ -62,7 +65,7 @@ app.get(
   passport.authenticate('google', {
     failureRedirect: '/faliure',
     successRedirect: '/',
-    session: false,
+    session: true,
   }),
   (req, res) => {
     console.log('google called back')
