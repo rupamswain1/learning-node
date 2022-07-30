@@ -28,11 +28,11 @@ const VerifyCallback = (accessToken, refreshToken, profile, done) => {
 passport_1.default.use(new passport_google_oauth2_1.Strategy(AUTH_OPTIONS, VerifyCallback));
 //Save the session to the cookie
 passport_1.default.serializeUser((user, done) => {
-    done(null, user);
+    done(null, user.id);
 });
 //Read the session from the cookie
-passport_1.default.deserializeUser((obj, done) => {
-    done(null, obj);
+passport_1.default.deserializeUser((id, done) => {
+    done(null, id);
 });
 const app = express_1.default();
 app.use(helmet_1.default());
