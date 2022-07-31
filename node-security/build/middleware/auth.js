@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.auth = void 0;
 const auth = (req, res, next) => {
-    const isLoggedIn = true;
+    const isLoggedIn = req.isAuthenticated() && req.user;
     if (isLoggedIn) {
         next();
     }

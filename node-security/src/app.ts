@@ -5,6 +5,7 @@ import express from 'express'
 import helmet from 'helmet'
 import passport from 'passport'
 import { Strategy, VerifyCallback } from 'passport-google-oauth2'
+import { auth } from './middleware/auth'
 import path from 'path'
 
 const CONFIG = {
@@ -76,7 +77,7 @@ app.get('/auth/logout', (req, res) => {
   res.send('Logout')
 })
 
-app.get('/secret', (req, res) => {
+app.get('/secret', auth, (req, res) => {
   res.status(200).send('Your Secret is LOL!!!')
 })
 

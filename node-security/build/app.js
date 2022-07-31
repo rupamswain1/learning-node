@@ -9,6 +9,7 @@ const express_1 = __importDefault(require("express"));
 const helmet_1 = __importDefault(require("helmet"));
 const passport_1 = __importDefault(require("passport"));
 const passport_google_oauth2_1 = require("passport-google-oauth2");
+const auth_1 = require("./middleware/auth");
 const path_1 = __importDefault(require("path"));
 const CONFIG = {
     CLIENT_ID: process.env.CLIENT_ID || '',
@@ -56,7 +57,7 @@ app.get('/auth/google/callback', passport_1.default.authenticate('google', {
 app.get('/auth/logout', (req, res) => {
     res.send('Logout');
 });
-app.get('/secret', (req, res) => {
+app.get('/secret', auth_1.auth, (req, res) => {
     res.status(200).send('Your Secret is LOL!!!');
 });
 app.get('/falure', (req, res) => {
