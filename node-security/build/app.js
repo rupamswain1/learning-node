@@ -55,7 +55,8 @@ app.get('/auth/google/callback', passport_1.default.authenticate('google', {
     console.log('google called back');
 });
 app.get('/auth/logout', (req, res) => {
-    res.send('Logout');
+    req.logOut();
+    return res.redirect('/');
 });
 app.get('/secret', auth_1.auth, (req, res) => {
     res.status(200).send('Your Secret is LOL!!!');

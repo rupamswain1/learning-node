@@ -74,7 +74,8 @@ app.get(
 )
 
 app.get('/auth/logout', (req, res) => {
-  res.send('Logout')
+  req.logOut()
+  return res.redirect('/')
 })
 
 app.get('/secret', auth, (req, res) => {
