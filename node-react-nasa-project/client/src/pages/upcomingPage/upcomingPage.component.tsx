@@ -21,7 +21,7 @@ export const UpcomingPage = () => {
     const [upcomingLaunch, setupcomingLaunch] = useState<UpcomingPageState[] | undefined>();
     const [reload, setReload] = useState<boolean>(false);
     useEffect(() => {
-        axios.get('http://localhost:8000/v1/launches/upcoming')
+        axios.get('v1/launches/upcoming')
             .then(result => setupcomingLaunch(result.data))
             .catch(err => console.log(err))
     }, [reload])
@@ -30,7 +30,7 @@ export const UpcomingPage = () => {
 
         if (className === 'close-btn') {
             if (id) {
-                axios.delete(`http://localhost:8000/v1/launches/${id}`)
+                axios.delete(`v1/launches/${id}`)
                     .then(result => setReload(!reload))
                     .catch(err => console.log(err))
             }
