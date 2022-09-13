@@ -21,4 +21,5 @@ app.use('/v1', api_1.default);
 app.get('/', (req, res) => {
     res.sendFile(path_1.default.join(__dirname, '..', 'public', 'index.html'));
 });
+//this is a test comm
 exports.default = app;

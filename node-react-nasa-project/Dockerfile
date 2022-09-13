@@ -5,7 +5,7 @@ WORKDIR /app
 COPY package*.json ./
 
 COPY client/package*.json client/
-RUN npm run install-client --only=production
+RUN npm run install-client
 
 COPY server/package*.json server/
 RUN npm run install-server --only=production
@@ -13,7 +13,7 @@ RUN npm run install-server --only=production
 COPY client/ client/
 RUN npm run build --prefix client
 
-COPY sever/ server/
+COPY server/ server/
 
 USER node
 

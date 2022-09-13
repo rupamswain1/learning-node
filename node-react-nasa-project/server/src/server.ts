@@ -27,7 +27,7 @@ const startServer = async () => {
   await loadPlanets()
   await loadLaunchData()
   server.listen(PORT, () => {
-    console.log(`Listining on port ${PORT}`)
+    console.log(`Listining on port ${PORT}`) 
   })
 }
 startServer()
