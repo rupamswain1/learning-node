@@ -1,76 +1,33 @@
 const express = require('express')
-const { buildSchema } = require('graphql')
-const { graphqlHttp, graphqlHTTP } = require('express-graphql')
 
-const schema = buildSchema(`
-   type Query{
-    products:[Product]
-    orders:[Order]
-   }
+const { graphqlHTTP } = require('express-graphql')
+const { loadFilesSync } = require('@graphql-tools/load-files')
+const { makeExecutableSchema } = require('@graphql-tools/schema')
+const path = require('path')
 
-   type Product{
-    id:ID!
-    description:String!
-    reviews:[Review]
-    price:Float!
-   }
+const typesArray = loadFilesSync(path.join(__dirname, '**/*.graphql'))
 
-   type Review{
-    rating: Int!
-    comment:String
-   }
-
-   type Order{
-    date:String!
-    subTotal:Float!
-    items:[OrderItems]
-   }
-
-   type OrderItems{
-    product:Product!
-    quantity:Int!
-   }
-`)
+const schema = makeExecutableSchema({
+  typeDefs: typesArray,
+  resolvers: {
+    Query: {
+      products: async (parent) => {
+        console.log('getting paroduct')
+        const products = Promise.resolve(parent.products)
+        return products
+      },
+      orders: async (parent) => {
+        console.log('getting orders')
+        const orders = Promise.resolve(parent.orders)
+        return orders
+      },
+    },
+  },
+})
 
 const root = {
-  products: [
-    {
-      id: '3060gc',
-      description: '3060 graphic card',
-      price: 35000,
-      reviews: [
-        {
-          rating: 5,
-          comment: 'good',
-        },
-        {
-          rating: 2,
-          comment: 'broken item recieved',
-        },
-      ],
-    },
-    {
-      id: 'inti5',
-      description: 'Intel i5',
-      price: 36000,
-    },
-  ],
-  orders: [
-    {
-      date: '01-01-2022',
-      subTotal: 700000.0,
-      items: [
-        {
-          product: {
-            id: '3060gc',
-            description: 'Asus 3060 gc',
-            price: 80000,
-          },
-          quantity: 1,
-        },
-      ],
-    },
-  ],
+  products: require('./products/products.model'),
+  orders: require('./orders/orders.model'),
 }
 
 const app = express()
