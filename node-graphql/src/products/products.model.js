@@ -1,4 +1,4 @@
-module.exports = [
+const products = [
   {
     id: '3060gc',
     description: '3060 graphic card',
@@ -20,3 +20,11 @@ module.exports = [
     price: 36000,
   },
 ]
+
+function getAllProducts() {
+  return products
+}
+
+module.exports = {
+  getAllProducts,
+}
