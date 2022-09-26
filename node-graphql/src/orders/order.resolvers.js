@@ -6,7 +6,7 @@ module.exports = {
       return getAllOrders()
     },
     ordersById: (_, args) => {
-      console.log(args.id)
+      
       return getProductById(args.id)
     },
   },

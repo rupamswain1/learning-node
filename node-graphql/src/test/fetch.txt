@@ -1,0 +1,48 @@
+{
+  ordersById(id:"od1"){
+    subTotal
+    id
+  }
+  orders {
+    id
+    subTotal
+    items {
+      quantity
+      product {
+        id
+        price
+        description
+        reviews {
+          comment
+          rating
+        }
+      }
+    }
+  }
+  products {
+    id
+    description
+    reviews {
+      rating
+      comment
+    }
+    price
+  }
+  productsByPrice(minPrice:10,maxPrice:40000) {
+    id
+    description
+    reviews {
+      rating
+      comment
+    }
+    price
+  }
+  
+  productsById(id:"3060gc"){
+    id,
+    description
+    reviews{
+      rating
+    }
+  }
+}

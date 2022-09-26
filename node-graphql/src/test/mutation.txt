@@ -1,0 +1,29 @@
+
+mutation{
+  addNewProduct(id:"rx7001",description:"Graphic card by AMD",price:35000){
+    id
+    description
+    reviews{
+      rating
+    }
+  },
+  graphicReview:addNewProductReview(id:"rx7001",rating:"3",comment:"too expensive"){
+    rating,
+    comment
+  }
+  nvidiaReview:addNewProductReview(id:"3060gc",rating:"3",comment:"too less expensive"){
+    rating,
+    comment
+  }
+  
+}
+
+
+query{
+  productsById(id:"rx7001"){
+    reviews{
+      rating
+      comment
+    }
+  }
+}

@@ -18,6 +18,7 @@ const products = [
     id: 'inti5',
     description: 'Intel i5',
     price: 36000,
+    reviews: [],
   },
 ]
 
@@ -37,8 +38,36 @@ function getProductById(id) {
   })
 }
 
+function addNewProduct(id, description, price) {
+  const newProduct = {
+    id,
+    price,
+    description,
+    reviews: [],
+  }
+  products.push(newProduct)
+  return newProduct
+}
+
+function addNewProductReview(id, rating, comment) {
+  const product = getProductById(id)
+
+  if (product) {
+    const newReview = {
+      rating,
+      comment,
+    }
+    console.log(product)
+    product[0].reviews.push(newReview)
+
+    return newReview
+  }
+}
+
 module.exports = {
   getAllProducts,
   getProductsByPrice,
   getProductById,
+  addNewProduct,
+  addNewProductReview,
 }
