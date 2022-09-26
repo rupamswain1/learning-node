@@ -1,8 +1,10 @@
 type Query {
   orders: [Order]
+  ordersById(id: ID): [Order]
 }
 
 type Order {
+  id: ID
   date: String!
   subTotal: Float!
   items: [OrderItems]
