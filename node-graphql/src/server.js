@@ -18,7 +18,7 @@ const startApolloServer = async () => {
   });
 
   const server = new ApolloServer({
-    schema,
+    schema: schema,
   });
 
   await server.start();
