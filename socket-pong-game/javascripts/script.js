@@ -2,6 +2,7 @@
 const canvas = document.createElement('canvas');
 const context = canvas.getContext('2d');
 const socket = io('http://localhost:3000');
+let isRefree = false;
 let paddleIndex = 0;
 
 let width = 500;
@@ -180,11 +181,14 @@ function animate() {
 }
 
 // Start Game, Reset Everything
-function startGame() {
+function loadGame() {
   createCanvas();
   renderIntro();
   socket.emit('ready');
-  paddleIndex = 0;
+}
+
+function startGame() {
+  paddleIndex = isRefree ? 0 : 1;
   window.requestAnimationFrame(animate);
   canvas.addEventListener('mousemove', (e) => {
     playerMoved = true;
@@ -201,8 +205,15 @@ function startGame() {
 }
 
 // On Load
-startGame();
+loadGame();
 
 socket.on('connect', () => {
   console.log('connected as id: ', socket.id);
+});
+
+socket.on('startGame', (refreeId) => {
+  console.log('start is recieved');
+  console.log('Refree id: ', refreeId);
+  isRefree = socket.id === refreeId;
+  startGame();
 });
