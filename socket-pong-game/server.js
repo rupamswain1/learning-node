@@ -20,8 +20,8 @@ io.on('connection', (socket) => {
     console.log('Player Ready', socket.id);
 
     readyPlayerCount++;
-    console.log(readyPlayerCount === 2);
-    if (readyPlayerCount === 2) {
+    console.log(readyPlayerCount % 2 === 0);
+    if (readyPlayerCount % 2 === 0) {
       console.log('emitting');
       io.emit('startGame', socket.id);
     }
@@ -29,5 +29,13 @@ io.on('connection', (socket) => {
 
   socket.on('paddleMove', (paddleData) => {
     socket.broadcast.emit('paddleMove', paddleData);
+  });
+
+  socket.on('ballMove', (ballData) => {
+    socket.broadcast.emit('ballMove', ballData);
+  });
+
+  socket.on('disconnect', (reason) => {
+    console.log(`client with ${socket.id} disconnected, reason: ${reason}`);
   });
 });
